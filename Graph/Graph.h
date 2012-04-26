@@ -1,7 +1,7 @@
-#ifndef 1004STOUGHTONLIB_GRAPH_H
-#define 1004STOUGHTONLIB_GRAPH_H
+#ifndef STOUGHTON1004LIB_GRAPH_H
+#define STOUGHTON1004LIB_GRAPH_H
 
-namespace 1004StoughtonLib {
+namespace Stoughton1004Lib {
 
 /**
  * Represnts a collection of edges and vertices
@@ -12,6 +12,6 @@ class Graph {
 
 };  //class Graph
 
-}   //namespace 1004StoughtonLib
+}   //namespace Stoughton1004Lib
 
 #endif
