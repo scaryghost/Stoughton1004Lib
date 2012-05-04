@@ -1,6 +1,7 @@
 #ifndef STOUGHTON1004LIB_GRAPH_H
 #define STOUGHTON1004LIB_GRAPH_H
 
+#include <tr1/unordered_map>
 namespace Stoughton1004Lib {
 
 /**
@@ -8,8 +9,16 @@ namespace Stoughton1004Lib {
  * @author etsai
  * @author sjiang
  */
-class Graph {
 
+class Vertex{
+};
+
+class Graph {
+public:
+  bool insertVertex(const Vertex & newVertex, const std::vector<Vertex> & newEdges);
+	bool isConnected();
+private:
+	std::tr1::unordered_map<Vertex, std::vector<Vertex> > adjList;
 };  //class Graph
 
 }   //namespace Stoughton1004Lib
