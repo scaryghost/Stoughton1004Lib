@@ -62,7 +62,7 @@ public:
     */
     Vertex& getEndVertex() const;
 
-    std::string virtual getName() const;
+    std::string getName() const;
 };  //class Edge
 
 }   //namespace Stoughton1004Lib
