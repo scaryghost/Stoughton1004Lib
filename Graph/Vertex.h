@@ -30,7 +30,7 @@ public:
      */
     const std::vector<Edge>& getEdges() const;
 
-    std::string virtual getName() const
+    std::string getName() const;
 private:
     std::vector<Edge> edges;    ///< The edges originating from the vertex
 };  //class Vertex
