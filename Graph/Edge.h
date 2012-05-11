@@ -8,6 +8,8 @@
 
 namespace Stoughton1004Lib {
 
+class Vertex;
+
 /**
  * Stores information about an edge in a graph
  * @author etsai
@@ -43,7 +45,7 @@ public:
      * @param   start   Vertex the edge originates from
      * @param   end     Vertex the edge connects to
      */
-    void connect(const T& start, const T& end);
+    void connect(const Vertex& start, const Vertex& end);
 
     /**
      * Retrieve value for the given edge attribute

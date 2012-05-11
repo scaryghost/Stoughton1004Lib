@@ -1,24 +1,24 @@
 #include "Stoughton1004Lib/Graph/Vertex.h"
 
-#include <exception>
+#include <stdexcept>
 
 namespace Stoughton1004Lib {
 
-using std::exception;
+using std::runtime_error;
 
 Vertex::Vertex() {
 }
     
 void Vertex::addEdge(const Edge& edge) {
-    throw exception("Not yet implemented!");
+    throw runtime_error("Not yet implemented!");
 }
 
 const std::vector<Edge>& Vertex::getEdges() const {
-    throw exception("Not yet implemented!");
+    throw runtime_error("Not yet implemented!");
 }
 
-std::string getName() const {
-    throw exception("Not yet implemented!");
+std::string Vertex::getName() const {
+    throw runtime_error("Not yet implemented!");
 }
 
 }

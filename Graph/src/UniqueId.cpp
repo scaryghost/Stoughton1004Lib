@@ -1,4 +1,4 @@
-#include "Graph/src/UniqueId.h"
+#include "Stoughton1004Lib/Graph/src/UniqueId.h"
 
 namespace Stoughton1004Lib {
 
@@ -13,7 +13,7 @@ UniqueId::UniqueId() {
     currId++;
 }
 
-int Unique::getId() const {
+int UniqueId::getId() const {
     return id;
 }
 

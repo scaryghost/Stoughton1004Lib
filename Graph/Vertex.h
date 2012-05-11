@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "Stoughton1004Lib/Graph/Edge.h"
 #include "Stoughton1004Lib/Graph/src/UniqueId.h"
 
 namespace Stoughton1004Lib {

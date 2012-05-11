@@ -17,7 +17,7 @@ public:
      * Get the current numerical id
      * @return  Number of UUIDs created
      */
-    static int getCurrentId() const;
+    static int getCurrentId();
 
     /**
      * Default constructor that increments the id counter
