@@ -1,24 +1,26 @@
 #ifndef STOUGHTON1004LIB_GRAPH_H
 #define STOUGHTON1004LIB_GRAPH_H
 
-#include <tr1/unordered_map>
+#include "Stoughton1004Lib/Graph/Edge.h"
+#include "Stoughton1004Lib/Graph/Vertex.h"
+
+#include <unordered_map>
+
 namespace Stoughton1004Lib {
 
 /**
  * Represnts a collection of edges and vertices
+ * This class uses c++11 features supported in gcc 4.6.2.
  * @author etsai
  * @author sjiang
  */
-
-class Vertex{
-};
-
 class Graph {
 public:
-  bool insertVertex(const Vertex & newVertex, const std::vector<Vertex> & newEdges);
-	bool isConnected();
+    bool insertVertex(const Vertex & newVertex, const std::vector<Vertex> & newEdges);
+    bool isConnected();
 private:
-	std::tr1::unordered_map<Vertex, std::vector<Vertex> > adjList;
+	std::unordered_map<int, Vertex> vertices;
+    std::unordered_map<int, Edge> edges;
 };  //class Graph
 
 }   //namespace Stoughton1004Lib
