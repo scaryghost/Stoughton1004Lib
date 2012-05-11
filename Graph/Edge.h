@@ -1,6 +1,9 @@
 #ifndef STOUGHTON1004LIB_EDGE_H
 #define STOUGHTON1004LIB_EDGE_H
 
+#include <string>
+
+#include "Stoughton1004Lib/Graph/src/UniqueId.h"
 #include "Stoughton1004Lib/Graph/Vertex.h"
 
 namespace Stoughton1004Lib {
@@ -10,7 +13,7 @@ namespace Stoughton1004Lib {
  * @author etsai
  * @author sjiang
  */
-class Edge {
+class Edge : public UniqueId {
 public:
     /** Edge attributes */
     enum Attribute {
@@ -53,13 +56,15 @@ public:
      * @return  Reference to the origin vertex
      */
     Vertex& getStartVertex() const;
-    /**
+   /**
     * Get the vertex the edge terminates at
     * @return Terminal vertex
     */
     Vertex& getEndVertex() const;
-};
 
-}
+    std::string virtual getName() const;
+};  //class Edge
+
+}   //namespace Stoughton1004Lib
 
 #endif

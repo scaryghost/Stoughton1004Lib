@@ -3,25 +3,24 @@
 
 #include <vector>
 
+#include "Stoughton1004Lib/Graph/src/UniqueId.h"
+
 namespace Stoughton1004Lib {
 
 class Edge;
 
-class Vertex {
+class Vertex : public UniqueId {
 public:
-    static int numVertices;
-
     Vertex();
     
     void addEdge(const Edge& edge);
     const std::vector<Edge>& getEdges() const;
-    int getId() const;
 
+    std::string virtual getName() const
 private:
-    int id;
     std::vector<Edge> edges;
-};
+};  //class Vertex
 
-}  //namespace Stoughton1004Lib
+}   //namespace Stoughton1004Lib
 
 #endif
