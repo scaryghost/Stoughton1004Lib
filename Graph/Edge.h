@@ -1,6 +1,8 @@
 #ifndef STOUGHTON1004LIB_EDGE_H
 #define STOUGHTON1004LIB_EDGE_H
 
+#include "Stoughton1004Lib/Graph/Vertex.h"
+
 namespace Stoughton1004Lib {
 
 /**
@@ -8,7 +10,6 @@ namespace Stoughton1004Lib {
  * @author etsai
  * @author sjiang
  */
-template <class T>
 class Edge {
 public:
     /** Edge attributes */
@@ -23,7 +24,7 @@ public:
      * @param   start   Vertex the edge originates from
      * @param   end     Vertex the edge connects to
      */
-    Edge(const T& start, const T& end);
+    Edge(const Vertex start, const Vertex end);
 
     /**
      * Sets an edge attribute.
@@ -51,12 +52,12 @@ public:
      * Get the vertex the edge originates from
      * @return  Reference to the origin vertex
      */
-    T& getStartVertex() const;
+    Vertex& getStartVertex() const;
     /**
     * Get the vertex the edge terminates at
     * @return Terminal vertex
     */
-    T& getEndVertex() const;
+    Vertex& getEndVertex() const;
 };
 
 }
