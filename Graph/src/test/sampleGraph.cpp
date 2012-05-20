@@ -1,4 +1,4 @@
-#include "Stoughton1004Lib/Graph/graph.h"
+#include "Stoughton1004Lib/Graph/Graph.h"
 
 using namespace Stoughton1004Lib;
 
