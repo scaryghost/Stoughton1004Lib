@@ -1,6 +1,8 @@
 #ifndef STOUGHTON1004LIB_DATAGRAMSOCKET_H
 #define STOUGHTON1004LIB_DATAGRAMSOCKET_H
 
+#include "Stoughton1004Lib/Exception/S1004LibException.h"
+
 #include <string>
 #include <sys/types.h>
 
@@ -16,10 +18,10 @@ class DatagramSocket {
 public:
     DatagramSocket();
 
-    void bind();
-    void bind(int port);
-    void receive(DatagramPacket& packet);
-    void send(const DatagramPacket& packet);
+    void bind() throw(S1004LibException);
+    void bind(int port) throw(S1004LibException);
+    void receive(DatagramPacket& packet) throw(S1004LibException);
+    void send(const DatagramPacket& packet) throw(S1004LibException);
 
     int getLocalPort() const;
 
