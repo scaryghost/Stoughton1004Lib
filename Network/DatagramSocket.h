@@ -15,7 +15,6 @@ class DatagramSocket {
 public:
     DatagramSocket();
     DatagramSocket(int port);
-    DatagramSocket(std::string address, int port);
 
     void bind(int port);
     void receive(const DatagramPacket& packet);
@@ -23,12 +22,10 @@ public:
 
     int getLocalPort() const;
     int getPort() const;
-    std::string getAddress() const;
 
 private:
-    std::string address;
     int port;
-};
+};  //class DatagramSocket
 
 }   //Stoughton1004Lib
 
