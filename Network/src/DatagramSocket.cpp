@@ -16,7 +16,7 @@ using std::string;
 using std::stringstream;
 using std::time;
 
-DatagramSocket::DatagramSocket() {
+DatagramSocket::DatagramSocket() throw(S1004LibException) {
     udpSocket= socket(AF_INET, SOCK_DGRAM, 0);
     
     if (udpSocket < 0) {
