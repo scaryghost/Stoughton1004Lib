@@ -23,18 +23,27 @@ std::string DatagramPacket::getData() const {
     return data;
 }
 
+int DatagramPacket::getLength() const {
+    return length;
+}
+
 DatagramPacket& DatagramPacket::setAddress(std::string address) {
-    this.address= address;
+    this->address= address;
     return *this;
 }
 
 DatagramPacket& DatagramPacket::setPort(int port) {
-    this.port= port;
+    this->port= port;
     return *this;
 }
 
 DatagramPacket& DatagramPacket::setData(std::string data) {
-    this.data= data;
+    this->data.assign(data, 0, length);
+    return *this;
+}
+
+DatagramPacket& DatagramPacket::setLength(int length) {
+    this->length= length;
     return *this;
 }
 
