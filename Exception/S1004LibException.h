@@ -9,7 +9,7 @@ namespace Stoughton1004Lib {
 class S1004LibException : public std::exception {
 public:
     S1004LibException(const std::string& msg) {
-        this.msg= msg;
+        this->msg= msg;
     }
     ~S1004LibException() throw() {
     }
