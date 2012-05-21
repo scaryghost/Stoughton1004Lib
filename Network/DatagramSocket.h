@@ -2,6 +2,7 @@
 #define STOUGHTON1004LIB_DATAGRAMSOCKET_H
 
 #include <string>
+#include <sys/types.h>
 
 namespace Stoughton1004Lib {
 
@@ -14,17 +15,17 @@ namespace Stoughton1004Lib {
 class DatagramSocket {
 public:
     DatagramSocket();
-    DatagramSocket(int port);
 
+    void bind();
     void bind(int port);
-    void receive(const DatagramPacket& packet);
+    void receive(DatagramPacket& packet);
     void send(const DatagramPacket& packet);
 
     int getLocalPort() const;
-    int getPort() const;
 
 private:
-    int port;
+    sockaddr_in socketInfo;
+    int udpSocket;
 };  //class DatagramSocket
 
 }   //Stoughton1004Lib
