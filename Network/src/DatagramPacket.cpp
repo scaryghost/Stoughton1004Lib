@@ -2,13 +2,17 @@
 
 namespace Stoughton1004Lib {
 
-DatagramPacket::DatagramPacket() {
+using std::string;
+
+DatagramPacket::DatagramPacket(int length) {
     port= -1;
+    this->length= length;
 }
 
-DatagramPacket::DatagramPacket(std::string address, int port) {
-    this.address= address;
-    this.port= port;
+DatagramPacket::DatagramPacket(int length, std::string address, int port) {
+    this->length= length;
+    this->address= address;
+    this->port= port;
 }
 
 std::string DatagramPacket::getAddress() const {
@@ -38,6 +42,7 @@ DatagramPacket& DatagramPacket::setPort(int port) {
 }
 
 DatagramPacket& DatagramPacket::setData(std::string data) {
+    length= data.length();
     this->data.assign(data, 0, length);
     return *this;
 }

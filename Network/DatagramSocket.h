@@ -2,8 +2,11 @@
 #define STOUGHTON1004LIB_DATAGRAMSOCKET_H
 
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
+#include "Stoughton1004Lib/Network/DatagramPacket.h"
 
 #include <string>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 
 namespace Stoughton1004Lib {

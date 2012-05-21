@@ -8,7 +8,7 @@ namespace Stoughton1004Lib {
 class DatagramPacket {
 public:
     DatagramPacket(int length);
-    DatagramPacket(int length, std::string address, int port)
+    DatagramPacket(int length, std::string address, int port);
 
     std::string getAddress() const;
     int getPort() const;

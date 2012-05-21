@@ -12,6 +12,7 @@ namespace Stoughton1004Lib {
 
 using std::rand;
 using std::srand;
+using std::string;
 using std::stringstream;
 using std::time;
 
@@ -23,7 +24,7 @@ DatagramSocket::DatagramSocket() {
     }
 }
 
-void DatagramSocket::bind() {
+void DatagramSocket::bind() throw(S1004LibException) {
     bool found= false;
     int port, offset;
 
@@ -48,12 +49,12 @@ void DatagramSocket::bind() {
 
 }
 
-void DatagramSocket::bind(int port) {
+void DatagramSocket::bind(int port) throw(S1004LibException) {
     socketInfo.sin_family= AF_INET;
     socketInfo.sin_addr.s_addr= INADDR_ANY;
     socketInfo.sin_port= htons(port);
 
-    if (bind(udpSocket, (struct sockaddr *) &socketInfo, sizeof(socketInfo)) < 0) {
+    if (::bind(udpSocket, (struct sockaddr *) &socketInfo, sizeof(socketInfo)) < 0) {
         stringstream msg(stringstream::out);
 
         msg << "Error binding to port " << port;
@@ -61,32 +62,34 @@ void DatagramSocket::bind(int port) {
     }
 }
 
-void DatagramSocket::receive(DatagramPacket& packet) {
+void DatagramSocket::receive(DatagramPacket& packet) throw(S1004LibException) {
     sockaddr_in sender;
     int nBytes;
+    socklen_t senderLength= sizeof(sender);
     char buffer[1025], senderAddr[17];
     string data;
     
     do {
-        nBytes= recvfrom(udpSocket, buffer, sizeof(buffer)-1, 0, (struct sockaddr *) &sender, sizeof(sender));
+        nBytes= recvfrom(udpSocket, buffer, sizeof(buffer)-1, 0, (struct sockaddr *) &sender, &senderLength);
 
         if (nBytes < 0) {
             throw S1004LibException("Error receiving packet");
         }
         buffer[nBytes]= '\0';
         data+= buffer;
-    } while (data.size() < packet.length() && nBytes == 1024);
+    } while (data.size() < packet.getLength() && nBytes == 1024);
 
     inet_ntop(AF_INET, &sender.sin_addr, senderAddr, sizeof(senderAddr));
-    packet.setData(data).setAddress(inet_ntoa(senderAddr)).setPort(ntohs(sender.sin_port));
+    packet.setData(data).setAddress(senderAddr).setPort(ntohs(sender.sin_port));
 }
 
-void DatagramSocket::send(const DatagramPacket& packet) {
+void DatagramSocket::send(const DatagramPacket& packet) throw(S1004LibException) {
     sockaddr_in recipient;
     int nBytes;
 
-    inet_pton(AF_INET, packet.getAddress().c_str(), &(recipient.sin_addr));
-    recipient.sin_port= htos(packet.getPort());
+    recipient.sin_family= AF_INET;
+    inet_pton(recipient.sin_family, packet.getAddress().c_str(), &(recipient.sin_addr));
+    recipient.sin_port= htons(packet.getPort());
     nBytes= sendto(udpSocket, packet.getData().c_str(), packet.getLength(), 0, (struct sockaddr *) &recipient, sizeof(recipient));
 
     if (nBytes < 0) {
