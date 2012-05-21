@@ -27,7 +27,7 @@ std::string DatagramPacket::getData() const {
     return data;
 }
 
-int DatagramPacket::getLength() const {
+unsigned int DatagramPacket::getLength() const {
     return length;
 }
 

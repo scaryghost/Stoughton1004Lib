@@ -13,7 +13,7 @@ public:
     std::string getAddress() const;
     int getPort() const;
     std::string getData() const;
-    int getLength() const;
+    unsigned int getLength() const;
 
     DatagramPacket& setAddress(std::string address);
     DatagramPacket& setPort(int port);
