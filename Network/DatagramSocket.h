@@ -26,11 +26,15 @@ namespace Stoughton1004Lib {
 class DatagramSocket {
 public:
     /**
-     * Default constructor
+     * Opens a datagram socket
      * @throw   S1004LibException   If an error occured during the socket creation
      */
     DatagramSocket() throw(S1004LibException);
-
+    /**
+     * Closes the datagram socket
+     * @throw   S1004LibException   If an error occured when closing the socket
+     */
+    ~DatagramSocket() throw(S1004LibException);
     /**
      * Bind to first available random port between [30000,50000)
      * @throw   S1004LibException   If a port cannot be bound after 20 tries

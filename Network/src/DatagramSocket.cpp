@@ -37,6 +37,17 @@ DatagramSocket::DatagramSocket() throw(S1004LibException) {
     }
 }
 
+DatagramSocket::~DatagramSocket() throw(S1004LibException) {
+    int status;
+
+#ifdef _WIN32
+    status= closesocket(udpSocket);
+#else
+    status= close(udpSocket);
+#endif
+    if (status != 0) throw S1004LibException("Error closing DatagramSocket");
+}
+
 void DatagramSocket::bind() throw(S1004LibException) {
     bool found= false;
     int port, offset;
