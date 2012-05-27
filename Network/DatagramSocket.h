@@ -4,9 +4,15 @@
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 #include "Stoughton1004Lib/Network/DatagramPacket.h"
 
-#include <string>
+#ifdef WIN32
+#include <WinSock2.h>
+
+#pragma warning( disable : 4290 )
+#else
 #include <netinet/in.h>
 #include <sys/socket.h>
+#endif
+#include <string>
 #include <sys/types.h>
 
 namespace Stoughton1004Lib {

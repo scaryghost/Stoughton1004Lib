@@ -4,9 +4,16 @@
 #include <ctime>
 #include <sstream>
 
+#ifdef WIN32
+#include <Ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+
+typedef int socklen_t;
+#else
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#endif
 
 namespace Stoughton1004Lib {
 
@@ -17,6 +24,12 @@ using std::stringstream;
 using std::time;
 
 DatagramSocket::DatagramSocket() throw(S1004LibException) {
+#ifdef WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
+        throw S1004LibException("Error initializing Winsock");
+    }
+#endif
     udpSocket= socket(AF_INET, SOCK_DGRAM, 0);
     
     if (udpSocket < 0) {
@@ -28,14 +41,14 @@ void DatagramSocket::bind() throw(S1004LibException) {
     bool found= false;
     int port, offset;
 
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     port= rand() % 20000 + 30000;
     offset= 0;
     do {
         try {
             bind(port + offset);
             found= true;
-        } catch (S1004LibException &e) {
+        } catch (S1004LibException) {
             offset++;
         }
     } while(!found && offset < 20);
@@ -66,7 +79,7 @@ void DatagramSocket::receive(DatagramPacket& packet) throw(S1004LibException) {
     sockaddr_in sender;
     int nBytes;
     socklen_t senderLength= sizeof(sender);
-    char buffer[1025], senderAddr[17];
+    char buffer[1025];
     string data;
     
     do {
@@ -78,9 +91,7 @@ void DatagramSocket::receive(DatagramPacket& packet) throw(S1004LibException) {
         buffer[nBytes]= '\0';
         data+= buffer;
     } while (data.size() < packet.getLength() && nBytes == 1024);
-
-    inet_ntop(AF_INET, &sender.sin_addr, senderAddr, sizeof(senderAddr));
-    packet.setData(data).setAddress(senderAddr).setPort(ntohs(sender.sin_port));
+    packet.setData(data).setAddress(inet_ntoa(sender.sin_addr)).setPort(ntohs(sender.sin_port));
 }
 
 void DatagramSocket::send(const DatagramPacket& packet) throw(S1004LibException) {
