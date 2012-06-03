@@ -40,7 +40,7 @@ DatagramSocket::DatagramSocket() throw(S1004LibException) {
 DatagramSocket::~DatagramSocket() throw(S1004LibException) {
     int status;
 
-#ifdef _WIN32
+#ifdef WIN32
     status= closesocket(udpSocket);
 #else
     status= close(udpSocket);
