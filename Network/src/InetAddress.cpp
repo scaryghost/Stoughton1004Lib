@@ -11,7 +11,7 @@ namespace Stoughton1004Lib {
 using std::string;
 using std::vector;
 
-static vector<InetAddress> InetAddress::getByName(std::string hostName) {
+vector<InetAddress> InetAddress::getByName(std::string hostName) {
     vector<InetAddress> results;
     addrinfo hints, *res, *next;
     int err;
@@ -20,18 +20,21 @@ static vector<InetAddress> InetAddress::getByName(std::string hostName) {
     hints.ai_socktype= SOCK_STREAM;
     hints.ai_family= AF_INET;
 
-    if ((err= getaddrinto(hostName.c_str(), NULL, &hints, &res)) != 0) {
+    if ((err= getaddrinfo(hostName.c_str(), NULL, &hints, &res)) != 0) {
     }
 
     for(next= res; next != NULL; next= next->ai_next) {
-        INetAddress addr;
-        addr.rawIpAddr= ((sockaddr_int *)(next->ai_addr))->sin_addr.s_addr;
-        addr.ipAddr= inet_ntoa(addr);
+        InetAddress addr;
+        addr.rawIpAddr.s_addr= ((sockaddr_in *)(next->ai_addr))->sin_addr.s_addr;
+        addr.ipAddr= inet_ntoa(addr.rawIpAddr);
         addr.hostName= hostName;
         results.push_back(addr);
     }
 
     return results;
+}
+
+InetAddress::InetAddress() {
 }
 
 in_addr InetAddress::getAddress() const {
