@@ -1,8 +1,11 @@
 #ifndef STOUGHTON1004LIB_DATAGRAMSOCKET_H
 #define STOUGHTON1004LIB_DATAGRAMSOCKET_H
 
+#include "Stoughton1004Lib/Exception/S1004LibException.h"
+
 #include <netinet/in.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace Stoughton1004Lib {
@@ -13,8 +16,9 @@ public:
      * Get a list of all IP addresses of the given host name
      * @param   hostName    Host name to lookup
      * @return  All IP addresses of the host name
+     * @throw   S1004LibException   If an invalid host name is given
      */
-    static std::vector<InetAddress> getByName(std::string hostName);
+    static const std::vector<InetAddress>& getByName(std::string hostName) throw(S1004LibException);
 
     /**
      * Get the raw IP address of the object
@@ -33,6 +37,9 @@ public:
     std::string getHostName() const;
 
 private:
+    /** Cache of successful host name lookups */
+    static std::unordered_map<std::string, std::vector<InetAddress> > resultsCache;
+
     /**
      * Default constructor.
      * Set as private so users cannot create their own InetAddress object

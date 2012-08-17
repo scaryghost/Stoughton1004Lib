@@ -9,9 +9,16 @@
 namespace Stoughton1004Lib {
 
 using std::string;
+using std::unordered_map;
 using std::vector;
 
-vector<InetAddress> InetAddress::getByName(std::string hostName) {
+unordered_map<string, vector<InetAddress> > InetAddress::resultsCache;
+
+const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1004LibException) {
+    if (resultsCache.count(hostName) != 0) {
+        return resultsCache[hostName];
+    }
+
     vector<InetAddress> results;
     addrinfo hints, *res, *next;
     int err;
@@ -21,6 +28,7 @@ vector<InetAddress> InetAddress::getByName(std::string hostName) {
     hints.ai_family= AF_INET;
 
     if ((err= getaddrinfo(hostName.c_str(), NULL, &hints, &res)) != 0) {
+        throw S1004LibException("Invalid host name given: " + hostName);
     }
 
     for(next= res; next != NULL; next= next->ai_next) {
@@ -30,8 +38,9 @@ vector<InetAddress> InetAddress::getByName(std::string hostName) {
         addr.hostName= hostName;
         results.push_back(addr);
     }
+    resultsCache[hostName]= results;
 
-    return results;
+    return resultsCache[hostName];
 }
 
 InetAddress::InetAddress() {
