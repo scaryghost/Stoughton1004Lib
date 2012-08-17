@@ -14,7 +14,7 @@ public:
      * @param   hostName    Host name to lookup
      * @return  All IP addresses of the host name
      */
-    static const std::vector<InetAddress>& getByName(std::string hostName);
+    static std::vector<InetAddress> getByName(std::string hostName);
 
     /**
      * Get the raw IP address of the object
