@@ -2,9 +2,15 @@
 
 #include <string.h>
 #include <sys/types.h>
+
+#ifndef WIN32
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#else
+#include <ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#endif
 
 namespace Stoughton1004Lib {
 
@@ -18,6 +24,13 @@ const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1
     if (resultsCache.count(hostName) != 0) {
         return resultsCache[hostName];
     }
+
+#ifdef WIN32
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
+        throw S1004LibException("Error initializing Winsock");
+    }
+#endif
 
     vector<InetAddress> results;
     addrinfo hints, *res, *next;

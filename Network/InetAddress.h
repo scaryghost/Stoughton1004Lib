@@ -3,7 +3,12 @@
 
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 
+#ifndef WIN32
 #include <netinet/in.h>
+#else
+#include <WinSock2.h>
+#pragma warning( disable : 4290 )
+#endif
 #include <string>
 #include <unordered_map>
 #include <vector>
