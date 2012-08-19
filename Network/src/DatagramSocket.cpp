@@ -1,8 +1,10 @@
 #include "Stoughton1004Lib/Network/DatagramSocket.h"
+#include "Stoughton1004Lib/Network/InetAddress.h"
 
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
+#include <vector>
 
 #ifdef WIN32
 #include <Ws2tcpip.h>
@@ -22,6 +24,7 @@ using std::srand;
 using std::string;
 using std::stringstream;
 using std::time;
+using std::vector;
 
 DatagramSocket::DatagramSocket() throw(S1004LibException) {
 #ifdef WIN32
@@ -101,25 +104,33 @@ void DatagramSocket::receive(DatagramPacket& packet) throw(S1004LibException) {
         }
         buffer[nBytes]= '\0';
         data+= buffer;
-    } while (data.size() < packet.getLength() && nBytes == 1024);
+    } while (data.size() < packet.getLength() && nBytes == sizeof(buffer)-1);
     packet.setData(data).setAddress(inet_ntoa(sender.sin_addr)).setPort(ntohs(sender.sin_port));
 }
 
 void DatagramSocket::send(const DatagramPacket& packet) throw(S1004LibException) {
+    bool success= true;
     sockaddr_in recipient;
-    int nBytes;
 
     recipient.sin_family= AF_INET;
-    inet_pton(recipient.sin_family, packet.getAddress().c_str(), &(recipient.sin_addr));
     recipient.sin_port= htons(packet.getPort());
-    nBytes= sendto(udpSocket, packet.getData().c_str(), packet.getLength(), 0, (struct sockaddr *) &recipient, sizeof(recipient));
+    vector<InetAddress> results= InetAddress::getByName(packet.getAddress());
 
-    if (nBytes < 0) {
+    for(auto it= results.begin(); it != results.end(); it++) {
+        int nBytes;
+        inet_pton(recipient.sin_family, it->getHostAddress().c_str(), &(recipient.sin_addr));
+        nBytes= sendto(udpSocket, packet.getData().c_str(), packet.getLength(), 0, 
+            (struct sockaddr *) &recipient, sizeof(recipient));
+
+        success= success && (nBytes >= 0);
+    }
+    if (!success) {
         stringstream msg(stringstream::out);
 
         msg << "Error sending packet to " << packet.getAddress() << ":" << packet.getPort();
         throw S1004LibException(msg.str());
     }
+
 }
 
 int DatagramSocket::getLocalPort() const {

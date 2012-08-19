@@ -1,5 +1,5 @@
-#ifndef STOUGHTON1004LIB_DATAGRAMSOCKET_H
-#define STOUGHTON1004LIB_DATAGRAMSOCKET_H
+#ifndef STOUGHTON1004LIB_INETADDRESS_H
+#define STOUGHTON1004LIB_INETADDRESS_H
 
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 
@@ -10,6 +10,11 @@
 
 namespace Stoughton1004Lib {
 
+/**
+ * Manages host name lookups, mapping host names to ip addresses.  
+ * The functionality is based off the Java class of the same name
+ * @author etsai
+ */
 class InetAddress {
 public:
     /**
