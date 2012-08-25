@@ -109,7 +109,7 @@ void DatagramSocket::receive(DatagramPacket& packet) throw(S1004LibException) {
 }
 
 void DatagramSocket::send(const DatagramPacket& packet) throw(S1004LibException) {
-    bool success= true;
+    bool success= false;
     sockaddr_in recipient;
 
     recipient.sin_family= AF_INET;
@@ -122,7 +122,7 @@ void DatagramSocket::send(const DatagramPacket& packet) throw(S1004LibException)
         nBytes= sendto(udpSocket, packet.getData().c_str(), packet.getLength(), 0, 
             (struct sockaddr *) &recipient, sizeof(recipient));
 
-        success= success && (nBytes >= 0);
+        success= success || (nBytes < 0);
     }
     if (!success) {
         stringstream msg(stringstream::out);
