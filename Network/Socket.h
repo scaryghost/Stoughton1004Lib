@@ -1,6 +1,8 @@
 #ifndef STOUGHTON1004LIB_SOCKET_H
 #define STOUGHTON1004LIB_SOCKET_H
 
+#include "Stoughton1004Lib/Exception/S1004LibException.h"
+
 #include <string>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -14,13 +16,13 @@ public:
     /**
      * Create an unconnected socket
      */
-    Socket();
+    Socket() throw(S1004LibException);
     /**
      * Create a TCP socket, connected to the given hostname and port
      * @param   hostname    Host to connect to
      * @param   port        Port number to connect to
      */
-    Socket(const std::string& hostname, int port);
+    Socket(const std::string& hostname, int port) throw(S1004LibException);
 
     /**
      * Close the connection 
@@ -31,12 +33,12 @@ public:
      * @param   hostname    Host to connect to
      * @param   port        Port number to connect to
      */
-    void connect(const std::string& hostname, int port);
+    void connect(const std::string& hostname, int port) throw(S1004LibException);
     /**
      * Write the message to the connection
      * @param   msg     Message to be written
      */
-    void write(const std::string& msg);
+    void write(const std::string& msg) throw(S1004LibException);
     /**
      * Reads messages from the connection.  Reading stops when either 
      * there is nothing left or the number of bytes given has been read.  
@@ -45,14 +47,16 @@ public:
      * @param   nBytes  Number of bytes to read
      * @return  Message of at most nBytes length
      */
-    std::string read(int nBytes);
+    std::string read(int nBytes) throw(S1004LibException);
     /**
      * Read characters from the connection until a newline (\n), 
      * return carriage (\r), or return carriage followed by new line (\r\n) 
-     * is read.  The message will not contain the end of line characters
+     * is read.  The message will not contain the end of line characters.  If 
+     * a newline or return carriage is not in the message, the function will 
+     * hang until one is read.
      * @return  A line of characters from the connection
      */
-    std::string readLine();
+    std::string readLine() throw(S1004LibException);
 
     /**
      * Returns the connected state of the socket
