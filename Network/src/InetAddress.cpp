@@ -1,6 +1,7 @@
 #include "Stoughton1004Lib/Network/InetAddress.h"
 
 #include <string.h>
+#include <thread>
 #include <sys/types.h>
 
 #ifndef WIN32
@@ -14,20 +15,27 @@
 
 namespace Stoughton1004Lib {
 
+using std::lock_guard;
+using std::mutex;
 using std::string;
 using std::unordered_map;
 using std::vector;
 
 unordered_map<string, vector<InetAddress> > InetAddress::resultsCache;
+mutex cacheMutex;
 
 const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1004LibException) {
-    if (resultsCache.count(hostName) != 0) {
-        return resultsCache[hostName];
+
+    {
+        lock_guard<mutex> lock(cacheMutex);
+        if (resultsCache.count(hostName) != 0) {
+            return resultsCache[hostName];
+        }
     }
 
 #ifdef WIN32
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
         throw S1004LibException("Error initializing Winsock");
     }
 #endif
@@ -51,9 +59,13 @@ const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1
         addr.hostName= hostName;
         results.push_back(addr);
     }
-    resultsCache[hostName]= results;
 
-    return resultsCache[hostName];
+    {
+        lock_guard<mutex> lock(cacheMutex);
+        resultsCache[hostName]= results;
+
+        return resultsCache[hostName];
+    }
 }
 
 InetAddress::InetAddress() {
