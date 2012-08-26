@@ -65,6 +65,14 @@ public:
     bool isConnected() const;
 
 private:
+    /**
+     * Private constructor for building a Socket object when the 
+     * file descriptor and address information are already known
+     * @param   tcpSocket   File descriptor of the TCP socket
+     * @param   addr        Address information about the connection
+     */
+    Socket(int tcpSocket, sockaddr_in *addr);
+
     bool isClosed                   ///< Stores the closed state
     bool isConnected                ///< Store the connected state
     int tcpSocket;                  ///< Socket file descriptor

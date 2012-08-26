@@ -1,6 +1,8 @@
 #ifndef STOUGHTON1004LIB_SERVERSOCKET_H
 #define STOUGHTON1004LIB_SERVERSOCKET_H
 
+#include "Stoughton1004Lib/Exception/S1004LibException.h"
+
 #include <netinet/in.h>
 #include <sys/socket.h>
 
@@ -16,23 +18,24 @@ public:
     /**
      * Creates an unbounded server socket
      */
-    ServerSocket();
+    ServerSocket() throw(S1004LibException);
     /**
      * Creates a server socket bound to the specified port
      * @param   port    Port number to bind the server socket to
      */
-    ServerSocket(int port);
+    ServerSocket(int port) throw(S1004LibException);
 
     /**
      * Binds the server socket to the specified port
      * @param   port    Port number to bind the server socket to
      */
-    void bind(int port);
+    void bind(int port) throw(S1004LibException);
     /**
-     * Accepts an incoming connection to the server socket
+     * Accepts an incoming connection to the server socket.  The function 
+     * will hang until a connection is available
      * @return  Socket connecting to the client
      */
-    Socket accept();
+    Socket accept() throw(S1004LibException);
     /**
      * Closes the server socket
      */

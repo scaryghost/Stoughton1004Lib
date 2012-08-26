@@ -24,6 +24,16 @@ Socket::Socket(const string& hostname, int port) : Socket() throw(S1004LibExcept
     connect(hostname, port);
 }
 
+Socket::Socket(int tcpSocket, sockaddr_in *addr) {
+    this->tcpSocket= tcpSocket;
+    connectionInfo.sin_family= addr->sin_family;
+    connectionInfo.sin_port= addr->sin_port;
+    connectionInfo.sin_addr= addr->sin_addr;
+    
+    isConnected= true;
+    isClosed= false;
+}
+
 void Socket::close() {
     close(tcpSocket);
     isClosed= true;
