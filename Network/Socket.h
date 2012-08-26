@@ -62,6 +62,16 @@ public:
      * @return  True if the socket is connected
      */
     bool isConnected() const;
+    /**
+     * Returns the remote port number the socket is connected to
+     * @return  Port number connected to
+     */
+    int getPort() const;
+    /**
+     * Returns the remote IP address the socket is connected to as text
+     * @return  IP address connected to
+     */
+    std::string getAddress() const;    
 
 private:
     /**

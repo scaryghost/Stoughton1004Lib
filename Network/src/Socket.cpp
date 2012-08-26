@@ -1,6 +1,7 @@
 #include "Stoughton1004Lib/Network/Socket.h"
 
 #include "Stoughton1004Lib/Network/InetAddress.h"
+#include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sstream>
 #include <vector>
@@ -48,6 +49,9 @@ void Socket::close() {
 void Socket::connect(const string& hostname, int port) throw(S1004LibException) {
     if (closed) {
         throw S1004LibException("Socket is closed");
+    }
+    if (connected) {
+        throw S1004LibException("Already connected to a remote machine");
     }
 
     bool success= false;
@@ -129,6 +133,14 @@ string Socket::readLine() throw(S1004LibException) {
 
 bool Socket::isConnected() const {
     return connected;
+}
+
+int Socket::getPort() const {
+    return ntohs(connectionInfo.sin_port);
+}
+
+string Socket::getAddress() const {
+    return inet_ntoa(connectionInfo.sin_addr);
 }
 
 }

@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     cout << "Listening on port: " << port << endl;
     while(true) {
         Socket client= server.accept();
-        cout << "Recieved connection" << endl;
+        cout << "Recieved connection from " << client.getAddress() << ":" << client.getPort() << endl;
         thread th(handler, &client);
         th.detach();
     }
