@@ -4,5 +4,7 @@
 #include "Stoughton1004Lib/Network/DatagramPacket.h"
 #include "Stoughton1004Lib/Network/DatagramSocket.h"
 #include "Stoughton1004Lib/Network/InetAddress.h"
+#include "Stoughton1004Lib/Network/ServerSocket.h"
+#include "Stoughton1004Lib/Network/Socket.h"
 
 #endif
