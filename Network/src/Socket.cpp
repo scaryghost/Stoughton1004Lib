@@ -12,15 +12,11 @@ using std::stringstream;
 using std::vector;
 
 Socket::Socket() throw(S1004LibException) {
-    tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
-    if (tcpSocket < 0) {
-        throw S1004LibException("Cannot open TCP socket");
-    }
-    isConnected= false;
-    isClosed= false;
+    init();
 }
 
-Socket::Socket(const string& hostname, int port) : Socket() throw(S1004LibException) {
+Socket::Socket(const string& hostname, int port) throw(S1004LibException) {
+    init();
     connect(hostname, port);
 }
 
@@ -30,17 +26,27 @@ Socket::Socket(int tcpSocket, sockaddr_in *addr) {
     connectionInfo.sin_port= addr->sin_port;
     connectionInfo.sin_addr= addr->sin_addr;
     
-    isConnected= true;
-    isClosed= false;
+    connected= true;
+    closed= false;
+}
+
+void Socket::init() throw(S1004LibException) {
+    tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
+    if (tcpSocket < 0) {
+        throw S1004LibException("Cannot open TCP socket");
+    }
+
+    connected= false;
+    closed= false;
 }
 
 void Socket::close() {
-    close(tcpSocket);
-    isClosed= true;
+    ::close(tcpSocket);
+    closed= true;
 }
 
 void Socket::connect(const string& hostname, int port) throw(S1004LibException) {
-    if (isClosed) {
+    if (closed) {
         throw S1004LibException("Socket is closed");
     }
 
@@ -63,7 +69,7 @@ void Socket::connect(const string& hostname, int port) throw(S1004LibException) 
         throw S1004LibException(errorMsg.str());
     }
 
-    isConnected= true;
+    connected= true;
 }
 
 void Socket::write(const string& msg) throw(S1004LibException) {
@@ -75,11 +81,11 @@ void Socket::write(const string& msg) throw(S1004LibException) {
     }
 }
 
-string Socket::read(int nBytes) throw(S1004LibException) {
-    if (isClosed) {
+string Socket::read(unsigned int nBytes) throw(S1004LibException) {
+    if (closed) {
         throw S1004LibException("Socket closed, cannot read");
     }
-    if (!isConnected) {
+    if (!connected) {
         throw S1004LibException("Socket not connected, cannot read");
     }
 
@@ -88,7 +94,7 @@ string Socket::read(int nBytes) throw(S1004LibException) {
     int readBytes;
 
     do {
-        readBytes= read(sockfd,buffer, sizeof(buffer)-1);
+        readBytes= ::read(tcpSocket,buffer, sizeof(buffer)-1);
 
         if (readBytes < 0) {
             throw S1004LibException("Cannot read from socket");
@@ -102,10 +108,10 @@ string Socket::read(int nBytes) throw(S1004LibException) {
 }
 
 string Socket::readLine() throw(S1004LibException) {
-    if (isClosed) {
+    if (closed) {
         throw S1004LibException("Socket closed, cannot read");
     }
-    if (!isConnected) {
+    if (!connected) {
         throw S1004LibException("Socket not connected, cannot read");
     }
 
@@ -115,7 +121,7 @@ string Socket::readLine() throw(S1004LibException) {
     bool terminate= false;
 
     while(!terminate) {
-        readBytes= read(sockfd,buffer, sizeof(buffer)-1);
+        readBytes= ::read(tcpSocket,buffer, sizeof(buffer)-1);
 
         if (readBytes < 0) {
             throw S1004LibException("Cannot read from socket");
@@ -135,7 +141,7 @@ string Socket::readLine() throw(S1004LibException) {
 }
 
 bool Socket::isConnected() const {
-    return isConnected;
+    return connected;
 }
 
 }

@@ -2,6 +2,7 @@
 #define STOUGHTON1004LIB_SERVERSOCKET_H
 
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
+#include "Stoughton1004Lib/Network/Socket.h"
 
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -53,10 +54,16 @@ public:
     bool isClosed() const;
 
 private:
+    /**
+     * Initialize the member variables.  Need to do it this way 
+     * beacuse C++ doesn't support constructor delegation
+     */
+    void init() throw(S1004LibException);
+
     int tcpSocket;              ///< File descriptor for the socket
-    bool isBound;               ///< Stores the bound state
-    bool isConnected;           ///< Stores the closed state
-    sockaddr_in serverInfo      ///< Information about the server socket;
+    bool bound;                 ///< Stores the bound state
+    bool closed;                ///< Stores the closed state
+    sockaddr_in serverInfo;     ///< Information about the server socket;
 };  //class ServerSocket
 
 }   //namespace Stoughton1004Lib

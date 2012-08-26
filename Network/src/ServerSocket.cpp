@@ -7,23 +7,28 @@ namespace Stoughton1004Lib {
 using std::stringstream;
 
 ServerSocket::ServerSocket() throw(S1004LibException) {
-    tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        throw S1004LibException("Cannot create TCP Socket");
-    }
-    isBound= false;
-    isClosed= false;
+    init();
 }
 
-ServerSocket::ServerSocket(int port) : ServerSocket() throw(S1004LibException) {
+ServerSocket::ServerSocket(int port) throw(S1004LibException) {
+    init();
     bind(port);
 }
 
+void ServerSocket::init() throw(S1004LibException) {
+    tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
+    if (tcpSocket < 0) {
+        throw S1004LibException("Cannot create TCP Socket");
+    }
+    bound= false;
+    closed= false;
+}
+
 void ServerSocket::bind(int port) throw(S1004LibException) {
-    if (isClosed) {
+    if (closed) {
         throw S1004LibException("Cannot bind to port: server socket is closed");
     }
-    if (isBound) {
+    if (bound) {
         stringstream errorMsg(stringstream::out);
 
         errorMsg << "Socket already bound to port " << ntohs(serverInfo.sin_port);
@@ -41,20 +46,21 @@ void ServerSocket::bind(int port) throw(S1004LibException) {
         throw S1004LibException(errorMsg.str());
     }
     listen(tcpSocket, 5);
-    isBound= true;
+    bound= true;
 }
 
 Socket ServerSocket::accept() throw(S1004LibException) {
-    if (!isBound) {
+    if (!bound) {
         throw S1004LibException("Server socket not bound to a port");
     }
-    if (isClosed) {
+    if (closed) {
         throw S1004LibException("Cannot accept connections: server socket is closed");
     }
 
     int clientfd;
     sockaddr_in clientAddr;
-    int structSize= sizeof(client);
+    unsigned int structSize= sizeof(clientAddr);
+
 
     clientfd= ::accept(tcpSocket, (sockaddr *) &clientAddr, &structSize);
     if (clientfd < 0) {
@@ -64,16 +70,16 @@ Socket ServerSocket::accept() throw(S1004LibException) {
 }
 
 void ServerSocket::close() {
-    close(tcpSocket);
-    isClosed= true;
+    ::close(tcpSocket);
+    closed= true;
 }
 
 bool ServerSocket::isBound() const {
-    return isBound;
+    return bound;
 }
 
 bool ServerSocket::isClosed() const {
-    return isClosed;
+    return closed;
 }
 
 }

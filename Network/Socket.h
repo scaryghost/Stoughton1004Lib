@@ -47,7 +47,7 @@ public:
      * @param   nBytes  Number of bytes to read
      * @return  Message of at most nBytes length
      */
-    std::string read(int nBytes) throw(S1004LibException);
+    std::string read(unsigned int nBytes) throw(S1004LibException);
     /**
      * Read characters from the connection until a newline (\n), 
      * return carriage (\r), or return carriage followed by new line (\r\n) 
@@ -72,9 +72,14 @@ private:
      * @param   addr        Address information about the connection
      */
     Socket(int tcpSocket, sockaddr_in *addr);
+    /**
+     * Initialize the member variables.  Need to do it this way because 
+     * C++ doesn't support constructor delegation
+     */    
+    void init() throw(S1004LibException);
 
-    bool isClosed                   ///< Stores the closed state
-    bool isConnected                ///< Store the connected state
+    bool closed;                    ///< Stores the closed state
+    bool connected;                 ///< Store the connected state
     int tcpSocket;                  ///< Socket file descriptor
     sockaddr_in connectionInfo;     ///< Information about the connection
 
