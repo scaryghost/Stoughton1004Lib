@@ -49,8 +49,7 @@ public:
      */
     std::string read(unsigned int nBytes) throw(S1004LibException);
     /**
-     * Read characters from the connection until a newline (\n), 
-     * return carriage (\r), or return carriage followed by new line (\r\n) 
+     * Read characters from the connection until one of \n, \r, or \r\n 
      * is read.  The message will not contain the end of line characters.  If 
      * a newline or return carriage is not in the message, the function will 
      * hang until one is read.
@@ -78,6 +77,7 @@ private:
      */    
     void init() throw(S1004LibException);
 
+    bool readCarriage;              ///< True if a return carriage was read by readLine
     bool closed;                    ///< Stores the closed state
     bool connected;                 ///< Store the connected state
     int tcpSocket;                  ///< Socket file descriptor

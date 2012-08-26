@@ -90,7 +90,7 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
     }
 
     string msg;
-    char buffer[1025];
+    char buffer[2]= {'\0', '\0'};
     int readBytes;
 
     do {
@@ -98,44 +98,31 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
 
         if (readBytes < 0) {
             throw S1004LibException("Cannot read from socket");
+        } else {
+            /**
+             * Throw out \n in a \r\n sequence.  The readLine function sets 
+             * readCarriage to true if \r is read, then terminates.  This only 
+             * applies to readLine.  A normal read will consume everything
+             */
+            if (!readCarriage || buffer[0] != '\n') {
+                msg+= buffer;
+            }
+            readCarriage= false;
         }
-
-        buffer[readBytes]= '\0';
-        msg+= buffer;
     } while(msg.length() < nBytes && readBytes == sizeof(buffer)-1);
 
     return msg;
 }
 
 string Socket::readLine() throw(S1004LibException) {
-    if (closed) {
-        throw S1004LibException("Socket closed, cannot read");
-    }
-    if (!connected) {
-        throw S1004LibException("Socket not connected, cannot read");
-    }
+    string msg, ch;
+    auto terminate= [&readCarriage](string ch) -> bool {
+        readCarriage= ch == "\r";
+        return readCarriage || ch == "\n";
+    };
 
-    string msg;
-    char buffer[1025];
-    int readBytes;
-    bool terminate= false;
-
-    while(!terminate) {
-        readBytes= ::read(tcpSocket,buffer, sizeof(buffer)-1);
-
-        if (readBytes < 0) {
-            throw S1004LibException("Cannot read from socket");
-        }
-
-        buffer[readBytes]= '\0';
-        terminate= (buffer[readBytes-1] == '\n' || buffer[readBytes-1] == '\r');
-        if (terminate) {
-            buffer[readBytes-1]= '\0';
-            if (readBytes-2 >= 0 && buffer[readBytes-2]== '\r') {
-                buffer[readBytes-2]= '\r';
-            }
-        }
-        msg+= buffer;
+    while(!terminate((ch= read(1)))) {
+        msg+= ch;
     }
     return msg;
 }
