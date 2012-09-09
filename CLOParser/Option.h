@@ -44,15 +44,24 @@ public:
      * @return  Reference to the calling object
      */
     Option& withLongOpt(const std::string& longOpt);
+
+    /**
+     * Perform a less than comparison between two Option objects
+     * @param   lhs     Object on the left side of the operator
+     * @param   rhs     Object on the right side of the operator
+     * @return  True if the left side's optName is less than the right side's optName
+     */
+    friend bool operator <(const Option& lhs, const Options& rhs);
     
 private:
     std::string optName;        ///< Short name of the option
+    char separator;             ///< Character separator for arguments
+    int args;                   ///< Max number of arguments to pass
+    bool required;              ///< True if option is required
+
     std::string description;    ///< Description of the option
     std::string argName;        ///< Argument name
     std::string longOpt;        ///< Long name of the option
-    bool required;              ///< True if option is required
-    char separator;             ///< Character separator for arguments
-    int args;                   ///< Max number of arguments to pass
 };  //class Option
 
 }   //namespace Stoughton1004Lib
