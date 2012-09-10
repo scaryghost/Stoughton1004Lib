@@ -1,6 +1,9 @@
 #ifndef STOUGHTON1004LIB_OPTION_H
 #define STOUGHTON1004LIB_OPTION_H
 
+#include "Stoughton1004Lib/CLOParser/Arguments.h"
+
+#include <functional>
 #include <string>
 
 namespace Stoughton1004Lib {
@@ -11,6 +14,9 @@ namespace Stoughton1004Lib {
  */
 class Option {
 public:
+    /** Create a type name for the Option's callback action */
+    typedef std::function<void (Arguments)> OptCallback;
+
     /**
      * Create an option that takes no arguments
      * @param   optName     Name of the argument
@@ -44,6 +50,12 @@ public:
      * @return  Reference to the calling object
      */
     Option& withLongOpt(const std::string& longOpt);
+    /**
+     * Sets the callback action
+     * @param   callback    Lambda containing the action to be executed
+     * @return  Reference to the calling object
+     */
+    Option& withCallback(const OptCallback& callback);
 
     /**
      * Perform a less than comparison between two Option objects
@@ -62,6 +74,7 @@ private:
     std::string description;    ///< Description of the option
     std::string argName;        ///< Argument name
     std::string longOpt;        ///< Long name of the option
+    OptCallback callback;       ///< Callback action to be run if the option is matched
 };  //class Option
 
 }   //namespace Stoughton1004Lib

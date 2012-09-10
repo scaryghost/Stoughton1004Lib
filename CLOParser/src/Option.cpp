@@ -25,6 +25,11 @@ Option& Option::withLongOpt(const std::string& longOpt) {
     return *this;
 }
 
+Option& withCallback(const OptCallback& callback) {
+    this->callback= callback;
+    return *this;
+}
+
 bool operator <(const Option& lhs, const Options& rhs) {
     return lhs.optName < rhs.optName;
 }
