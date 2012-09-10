@@ -34,7 +34,9 @@ Socket::Socket(int tcpSocket, sockaddr_in *addr) {
     
     connected= true;
     closed= false;
+#ifdef WIN32
     winsockCleanup= false;
+#endif
 }
 
 Socket::~Socket() {
