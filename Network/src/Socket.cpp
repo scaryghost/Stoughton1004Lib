@@ -89,7 +89,7 @@ void Socket::connect(const string& hostname, int port) throw(S1004LibException) 
 
         connectionInfo.sin_addr= it->getAddress();
         result= ::connect(tcpSocket,(sockaddr *) &connectionInfo, sizeof(connectionInfo));
-        success= success || result > 0;
+        success= success || result >= 0;
     }
     if (!success) {
         stringstream errorMsg(stringstream::out);
