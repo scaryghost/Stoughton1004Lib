@@ -1,4 +1,4 @@
-#include "Stoughton1004Lib/CLOParser/Option.h"
+#include "Stoughton1004Lib/CLI/Option.h"
 
 namespace Stoughton1004Lib {
 

@@ -1,7 +1,7 @@
 #ifndef STOUGHTON1004LIB_OPTION_H
 #define STOUGHTON1004LIB_OPTION_H
 
-#include "Stoughton1004Lib/CLOParser/Arguments.h"
+#include "Stoughton1004Lib/CLI/Arguments.h"
 
 #include <functional>
 #include <string>
