@@ -1,6 +1,12 @@
 #include "Stoughton1004Lib/Network/ServerSocket.h"
 
 #include <sstream>
+#ifdef WIN32
+#include <Ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+
+typedef int socklen_t;
+#endif
 
 namespace Stoughton1004Lib {
 
@@ -15,7 +21,18 @@ ServerSocket::ServerSocket(int port) throw(S1004LibException) {
     bind(port);
 }
 
+ServerSocket::~ServerSocket() {
+    close();
+}
+
 void ServerSocket::init() throw(S1004LibException) {
+#ifdef WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
+        throw S1004LibException("Error initializing Winsock");
+    }
+#endif
+
     tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
         throw S1004LibException("Cannot create TCP Socket");
@@ -59,7 +76,7 @@ Socket ServerSocket::accept() throw(S1004LibException) {
 
     int clientfd;
     sockaddr_in clientAddr;
-    unsigned int structSize= sizeof(clientAddr);
+    socklen_t structSize= sizeof(clientAddr);
 
 
     clientfd= ::accept(tcpSocket, (sockaddr *) &clientAddr, &structSize);
@@ -70,7 +87,12 @@ Socket ServerSocket::accept() throw(S1004LibException) {
 }
 
 void ServerSocket::close() {
+#ifdef WIN32
+    closesocket(tcpSocket);
+    WSACleanup();
+#else
     ::close(tcpSocket);
+#endif
     closed= true;
 }
 

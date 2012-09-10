@@ -1,8 +1,13 @@
 #include "Stoughton1004Lib/Network/Socket.h"
-
 #include "Stoughton1004Lib/Network/InetAddress.h"
+
+#ifdef WIN32
+#include <Ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#else
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#endif
 #include <sstream>
 #include <vector>
 
@@ -29,9 +34,22 @@ Socket::Socket(int tcpSocket, sockaddr_in *addr) {
     
     connected= true;
     closed= false;
+    winsockCleanup= false;
+}
+
+Socket::~Socket() {
+    close();
 }
 
 void Socket::init() throw(S1004LibException) {
+#ifdef WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
+        throw S1004LibException("Error initializing Winsock");
+    }
+    winsockCleanup= true;
+#endif
+
     tcpSocket= socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
         throw S1004LibException("Cannot open TCP socket");
@@ -42,7 +60,14 @@ void Socket::init() throw(S1004LibException) {
 }
 
 void Socket::close() {
+#ifdef WIN32
+    closesocket(tcpSocket);
+    if (winsockCleanup) {
+        WSACleanup();
+    }
+#else
     ::close(tcpSocket);
+#endif
     closed= true;
 }
 
@@ -79,7 +104,11 @@ void Socket::connect(const string& hostname, int port) throw(S1004LibException) 
 void Socket::write(const string& msg) throw(S1004LibException) {
     int nBytes;
 
+#ifndef WIN32
     nBytes= ::write(tcpSocket, msg.c_str(), msg.length());
+#else
+    nBytes= send(tcpSocket, msg.c_str(), msg.length(), 0);
+#endif
     if (nBytes < 0) {
         throw S1004LibException("Cannot write to socket");
     }
@@ -98,7 +127,11 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
     int readBytes;
 
     do {
-        readBytes= ::read(tcpSocket,buffer, sizeof(buffer)-1);
+#ifndef WIN32
+        readBytes= ::read(tcpSocket, buffer, sizeof(buffer) - 1);
+#else
+        readBytes= recv(tcpSocket, buffer, sizeof(buffer) - 1, 0);
+#endif
 
         if (readBytes < 0) {
             throw S1004LibException("Cannot read from socket");
@@ -120,7 +153,7 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
 
 string Socket::readLine() throw(S1004LibException) {
     string msg, ch;
-    auto terminate= [&readCarriage](string ch) -> bool {
+    auto terminate= [this](string ch) -> bool {
         readCarriage= ch == "\r";
         return readCarriage || ch == "\n";
     };

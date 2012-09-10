@@ -4,8 +4,14 @@
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 #include "Stoughton1004Lib/Network/Socket.h"
 
+#ifdef WIN32
+#include <WinSock2.h>
+
+#pragma warning( disable : 4290 )
+#else
 #include <netinet/in.h>
 #include <sys/socket.h>
+#endif
 
 namespace Stoughton1004Lib {
 
@@ -25,6 +31,10 @@ public:
      * @param   port    Port number to bind the server socket to
      */
     ServerSocket(int port) throw(S1004LibException);
+    /**
+     * Closes the socket
+     */
+    ~ServerSocket();
 
     /**
      * Binds the server socket to the specified port

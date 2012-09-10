@@ -4,13 +4,24 @@
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 
 #include <string>
+#ifdef WIN32
+#include <WinSock2.h>
+
+#pragma warning( disable : 4290 )
+#else
 #include <netinet/in.h>
 #include <sys/socket.h>
+#endif
 
 namespace Stoughton1004Lib {
 
 class ServerSocket;
 
+/**
+ * Implements a TCP socket, able to connect to a remote host and exchange information 
+ * with the host.  This class will manage the differences between Linux and WinSock
+ * @author etsai
+ */
 class Socket {
 public:
     /**
@@ -23,6 +34,10 @@ public:
      * @param   port        Port number to connect to
      */
     Socket(const std::string& hostname, int port) throw(S1004LibException);
+    /**
+     * Closes the socket
+     */
+    ~Socket();
 
     /**
      * Close the connection 
@@ -92,6 +107,9 @@ private:
     bool connected;                 ///< Store the connected state
     int tcpSocket;                  ///< Socket file descriptor
     sockaddr_in connectionInfo;     ///< Information about the connection
+#ifdef WIN32
+    bool winsockCleanup;            ///< True if WSACleanup needs to be called
+#endif
 
     friend class ServerSocket;
 };  //class Socket
