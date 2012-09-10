@@ -47,8 +47,15 @@ void CLIBuilder::parse(int argc, char **argv) {
                 i++;
             }
             opt->callback(args);
+            options.erase(argv[i]);
         } else {
             i++;
+        }
+    }
+
+    for(auto it= options.begin(); it != options.end(); it++) {
+        if ((it->second).required) {
+            throw S1004LibException("Required option was not given");
         }
     }
 }

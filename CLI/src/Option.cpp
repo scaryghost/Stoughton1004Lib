@@ -5,12 +5,12 @@ namespace Stoughton1004Lib {
 Option::Option() {
 }
 
-Option::Option(const std::string& optName, bool required) : 
-    optName(optName), separator(0), args(0), required(required) {
+Option::Option(const std::string& optName, const OptCallback& callback) : 
+    optName(optName), separator(0), args(0), callback(callback) {
 }
 
-Option::Option(const std::string& optName, char separator, int args, bool required) : 
-    optName(optName), separator(separator), args(args), required(required) {
+Option::Option(const std::string& optName, char separator, int args, const OptCallback& callback) : 
+    optName(optName), separator(separator), args(args), callback(callback) {
 }
     
 Option& Option::operator=(const Option &rhs) {
@@ -43,8 +43,8 @@ Option& Option::withLongOpt(const std::string& longOpt) {
     return *this;
 }
 
-Option& Option::withCallback(const OptCallback& callback) {
-    this->callback= callback;
+Option& Option::withRequired(bool required) {
+    this->required= required;
     return *this;
 }
 

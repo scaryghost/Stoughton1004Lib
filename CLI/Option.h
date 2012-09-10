@@ -28,17 +28,17 @@ public:
     /**
      * Create an option that takes no arguments
      * @param   optName     Name of the argument
-     * @param   required    True if the option is required.  Default value is false
+     * @param   callback    Callback action to be execute if the option is passed in
      */
-    Option(const std::string& optName, bool required= false);
+    Option(const std::string& optName, const OptCallback& callback);
     /**
      * Create an option that takes additional arguments
      * @param   optName     Name of the argument
      * @param   separator   Character to separate the arguments
      * @param   args        Number of arguments
-     * @param   required    True if option is required.  Default value is false
+     * @param   callback    Callback action to be execute if the option is passed in
      */
-    Option(const std::string& optName, char separator, int args, bool required= false);
+    Option(const std::string& optName, char separator, int args, const OptCallback& callback);
     
     /**
      * Overloaded assignment operator
@@ -65,22 +65,22 @@ public:
      */
     Option& withLongOpt(const std::string& longOpt);
     /**
-     * Sets the callback action
-     * @param   callback    Lambda containing the action to be executed
+     * Sets the required attribute
+     * @param   required    True if the option is required
      * @return  Reference to the calling object
      */
-    Option& withCallback(const OptCallback& callback);
+    Option& withRequired(bool required);
 
 private:
     std::string optName;        ///< Short name of the option
     char separator;             ///< Character separator for arguments
     int args;                   ///< Max number of arguments to pass
-    bool required;              ///< True if option is required
+    OptCallback callback;       ///< Callback action to be run if the option is matched
 
     std::string description;    ///< Description of the option
     std::string argName;        ///< Argument name
     std::string longOpt;        ///< Long name of the option
-    OptCallback callback;       ///< Callback action to be run if the option is matched
+    bool required;              ///< True if option is required
 
     friend class CLIBuilder;
 };  //class Option
