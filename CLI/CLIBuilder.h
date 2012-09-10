@@ -44,7 +44,7 @@ public:
     /**
      * Print the usage message, and then terminate
      */
-    void usage();
+    void displayUsage();
 
 private:
     CLIBuilder();                           ///< Default constructor

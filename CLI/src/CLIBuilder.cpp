@@ -28,32 +28,32 @@ CLIBuilder& CLIBuilder::addOption(const Option& opt) throw(S1004LibException) {
 }
 
 CLIBuilder& CLIBuilder::setUsage(const string& usage) {
-    this->usager= usage;
+    this->usage= usage;
     return *this;
 }
 
-void parse(int argc, char **argv) {
+void CLIBuilder::parse(int argc, char **argv) {
     int i;
     
     while(i < argc) {
-        if (argv[i][0] == "-") {
-            Option opt= options[argv[i]];
+        if (argv[i][0] == '-') {
+            Option *opt= &options[argv[i]];
             Arguments args;
 
-            if (opt.args > 0) {
-                args.addArgs(argv[i+1], opt.separator);
+            if (opt->args > 0) {
+                args.addArgs(argv[i+1], opt->separator);
                 i+= 2;
             } else {
                 i++;
             }
-            opt.callback(args);
+            opt->callback(args);
         } else {
             i++;
         }
     }
 }
 
-void CLIBuilder::usage() {
+void CLIBuilder::displayUsage() {
     cout << "usage: " << usage << endl;
     for(auto it= options.begin(); it != options.end(); it++) {
         cout << it->first << "\t" << (it->second).description << endl;

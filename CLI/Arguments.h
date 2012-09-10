@@ -1,6 +1,7 @@
 #ifndef STOUGHTON1004LIB_ARGUMENTS_H
 #define STOUGHTON1004LIB_ARGUMENTS_H
 
+#include <string>
 #include <vector>
 
 namespace Stoughton1004Lib {
@@ -49,7 +50,7 @@ public:
     std::string asString(int index) const;
 
 private:
-    std::vector<string> argList;    ///< Collection of argument values
+    std::vector<std::string> argList;    ///< Collection of argument values
 };  //class Arguments
 
 }   //namespace Stoughton1004Lib

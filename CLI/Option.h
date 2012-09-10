@@ -20,6 +20,12 @@ public:
     typedef std::function<void (Arguments)> OptCallback;
 
     /**
+     * Create a blank option.  This is typically only used by classes that need a 
+     * default constructor i.e. map or vector
+     */
+    Option();
+
+    /**
      * Create an option that takes no arguments
      * @param   optName     Name of the argument
      * @param   required    True if the option is required.  Default value is false
@@ -34,6 +40,12 @@ public:
      */
     Option(const std::string& optName, char separator, int args, bool required= false);
     
+    /**
+     * Overloaded assignment operator
+     * @param   rhs     Object to copy from
+     * @return  Reference to calling object
+     */
+    Option& operator=(const Option &rhs);
     /**
      * Sets the description
      * @param   description     Description of the option
