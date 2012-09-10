@@ -8,6 +8,8 @@
 
 namespace Stoughton1004Lib {
 
+class CLIBuilder;
+
 /**
  * Container for a command line option and its attributes
  * @author etsai
@@ -57,14 +59,6 @@ public:
      */
     Option& withCallback(const OptCallback& callback);
 
-    /**
-     * Perform a less than comparison between two Option objects
-     * @param   lhs     Object on the left side of the operator
-     * @param   rhs     Object on the right side of the operator
-     * @return  True if the left side's optName is less than the right side's optName
-     */
-    friend bool operator <(const Option& lhs, const Options& rhs);
-    
 private:
     std::string optName;        ///< Short name of the option
     char separator;             ///< Character separator for arguments
@@ -75,6 +69,8 @@ private:
     std::string argName;        ///< Argument name
     std::string longOpt;        ///< Long name of the option
     OptCallback callback;       ///< Callback action to be run if the option is matched
+
+    friend class CLIBuilder;
 };  //class Option
 
 }   //namespace Stoughton1004Lib

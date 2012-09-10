@@ -30,8 +30,4 @@ Option& withCallback(const OptCallback& callback) {
     return *this;
 }
 
-bool operator <(const Option& lhs, const Options& rhs) {
-    return lhs.optName < rhs.optName;
-}
-
 }
