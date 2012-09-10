@@ -45,6 +45,7 @@ DatagramSocket::~DatagramSocket() throw(S1004LibException) {
 
 #ifdef WIN32
     status= closesocket(udpSocket);
+    WSACleanup();
 #else
     status= close(udpSocket);
 #endif
