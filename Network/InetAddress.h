@@ -17,7 +17,8 @@ namespace Stoughton1004Lib {
 
 /**
  * Manages host name lookups, mapping host names to ip addresses.  
- * The functionality is based off the Java class of the same name
+ * The functionality is based off the Java class of the same name.  
+ * The Linux version is thread safe but the Windows version is not.
  * @author etsai
  */
 class InetAddress {
