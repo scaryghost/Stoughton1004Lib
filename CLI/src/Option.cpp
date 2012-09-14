@@ -6,11 +6,11 @@ Option::Option() {
 }
 
 Option::Option(const std::string& optName, const OptCallback& callback) : 
-    optName(optName), separator(0), args(0), callback(callback) {
+    optName(optName), separator(0), args(0), callback(callback), required(false) {
 }
 
-Option::Option(const std::string& optName, char separator, int args, const OptCallback& callback) : 
-    optName(optName), separator(separator), args(args), callback(callback) {
+Option::Option(const std::string& optName, char separator, unsigned int args, const OptCallback& callback) : 
+    optName(optName), separator(separator), args(args), callback(callback), required(false) {
 }
     
 Option& Option::operator=(const Option &rhs) {

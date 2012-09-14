@@ -38,18 +38,20 @@ public:
     /**
      * Parse the command line arguments and execute the callback functions
      * @param   argc    Number of arguments
-     * @para    argv    Array of arguments passed in
+     * @param   argv    Array of arguments passed in
+     * @throw   S1004LibException   If invalid option was passed in or not enough 
+     * arguments were given for an option
      */
-    void parse(int argc, char **argv);
+    void parse(int argc, char **argv) throw(S1004LibException);
     /**
      * Print the usage message, and then terminate
      */
     void displayUsage();
 
 private:
-    CLIBuilder();                           ///< Default constructor
+    CLIBuilder();                           ///< Default constructor.  Hidden to make singleton
 
-    static CLIBuilder instance;             ///< Singleton instance of the class
+    static CLIBuilder instance;             ///< Single instance of the class
     std::map<std::string, Option> options;  ///< Map of added options
     std::string usage;                      ///< Usage message for the program
 };  //class CLIBuilder

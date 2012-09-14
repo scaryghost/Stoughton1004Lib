@@ -38,7 +38,7 @@ public:
      * @param   args        Number of arguments
      * @param   callback    Callback action to be execute if the option is passed in
      */
-    Option(const std::string& optName, char separator, int args, const OptCallback& callback);
+    Option(const std::string& optName, char separator, unsigned int args, const OptCallback& callback);
     
     /**
      * Overloaded assignment operator
@@ -74,13 +74,13 @@ public:
 private:
     std::string optName;        ///< Short name of the option
     char separator;             ///< Character separator for arguments
-    int args;                   ///< Max number of arguments to pass
+    unsigned int args;          ///< Max number of arguments to pass
     OptCallback callback;       ///< Callback action to be run if the option is matched
 
+    bool required;              ///< True if option is required
     std::string description;    ///< Description of the option
     std::string argName;        ///< Argument name
     std::string longOpt;        ///< Long name of the option
-    bool required;              ///< True if option is required
 
     friend class CLIBuilder;
 };  //class Option
