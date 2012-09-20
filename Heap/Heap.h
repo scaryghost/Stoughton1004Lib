@@ -200,7 +200,7 @@ bool Heap<T>::empty() const {
 
 template <class T>
 T Heap<T>::top() const {
-    return elements[numElements];
+    return elements[0];
 }
 
 template <class T>
