@@ -139,8 +139,8 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
             throw S1004LibException("Cannot read from socket");
         } else {
             /**
-             * Throw out \n in a \r\n sequence.  The readLine function sets 
-             * readCarriage to true if \r is read, then terminates.  This only 
+             * Throw out \\n in a \\r\\n sequence.  The readLine function sets 
+             * readCarriage to true if \\r is read, then terminates.  This only 
              * applies to readLine.  A normal read will consume everything
              */
             if (!readCarriage || buffer[0] != '\n') {

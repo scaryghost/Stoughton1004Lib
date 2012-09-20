@@ -64,7 +64,7 @@ public:
      */
     std::string read(unsigned int nBytes) throw(S1004LibException);
     /**
-     * Read characters from the connection until one of \n, \r, or \r\n 
+     * Read characters from the connection until one of \\n, \\r, or \\r\\n 
      * is read.  The message will not contain the end of line characters.  If 
      * a newline or return carriage is not in the message, the function will 
      * hang until one is read.
