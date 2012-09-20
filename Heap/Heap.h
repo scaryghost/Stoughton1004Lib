@@ -9,7 +9,7 @@ template <class T>
 
 /**
  * Data structure implementing a heap, or priority queue.  Elements are ordered 
- * based on their natural ordering or by a Comparator.
+ * based a Comparator.
  * @author etsai
  */
 class Heap {
@@ -17,10 +17,6 @@ public:
     /** Type name for the comparator function type */
     typedef std::function<int (const T&, const T&)> Comparator;
 
-    /**
-     * Create a heap, ordered by the elements' natural ordering
-     */
-    Heap();
     /**
      * Create a heap, ordering the elements according to the custom comparator
      * @param   comparator  Custom comparator used to ordered the heap
@@ -80,7 +76,6 @@ private:
     int numElements;                ///< Number of elements stored in the heap
     int capacity;                   ///< Max number of indices available
     Comparator comparator;          ///< Custom comparator used for ordering
-    bool useNaturalOrder;           ///< True if natural ordering should be used
 
     static const int INIT_CAPACITY; ///< Initial capacity of the heap
 };  //class Heap
@@ -89,16 +84,9 @@ template <class T>
 const int Heap<T>::INIT_CAPACITY= 128;
 
 template <class T>
-Heap<T>::Heap() {
-    init();
-    useNaturalOrder= true;
-}
-
-template <class T>
 Heap<T>::Heap(const Comparator& comparator) {
     init();
     this->comparator= comparator;
-    useNaturalOrder= false;
 }
 
 template <class T>
@@ -159,11 +147,11 @@ T Heap<T>::remove() {
 
     elements[index]= elements[numElements];
     numElements--;
-    while(!(elements[index] >= elements[getLeftChild(index)] && elements[index] >= elements[getRightChild(index)])) {
-        if (elements[index] < elements[getLeftChild(index)]) {
+    while(!(comparator(elements[index],elements[getLeftChild(index)]) > 0 && comparator(elements[index], elements[getRightChild(index)]) > 0)) {
+        if (comparator(elements[index], elements[getLeftChild(index)] > 0)) {
             swap(index, getLeftChild(index));
             index= getLeftChild(index);
-        } else if (elements[index] > elements[getRightChild(index)]) {
+        } else if (comparator(elements[index], elements[getRightChild(index)]) > 0) {
             swap(index, getRightChild(index));
             index= getRightChild(index);
         }
@@ -176,7 +164,7 @@ T Heap<T>::remove() {
 template <class T>
 bool contains(const T& elem) const {
     int index;
-    for(index= 0; index < numElements && elements[index] != elem; index++) {
+    for(index= 0; index < numElements && comparator(elements[index],elem) != 0; index++) {
     }
 
     return index < numElements;
