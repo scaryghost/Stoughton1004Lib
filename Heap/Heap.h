@@ -1,9 +1,9 @@
 #ifndef STOUGHTON1004LIB_HEAP_H
 #define STOUGHTON1004LIB_HEAP_H
 
-#include <iostream>
-#include <ostream>
+#include <cstring>
 #include <functional>
+#include <ostream>
 
 namespace Stoughton1004Lib {
 
@@ -82,12 +82,6 @@ public:
     void println(std::ostream &os) const;
 
 private:
-    /**
-     * Initialize the member variables.  Need this function because C++
-     * does not support constructor delegation yet
-     */
-    void init();
-
     T* elements;                    ///< Pointer to the allocated memory for the heap
     int numElements;                ///< Number of elements stored in the heap
     int capacity;                   ///< Max number of indices available
@@ -101,30 +95,25 @@ const int Heap<T>::INIT_CAPACITY= 128;
 
 template <class T>
 Heap<T>::Heap(const Comparator& comparator) {
-    init();
+    elements= new T[INIT_CAPACITY];
+    numElements= 0;
+    capacity= INIT_CAPACITY;
     this->comparator= comparator;
 }
 
 template <class T>
 Heap<T>::Heap(const Heap& copy) {
-    init();
     numElements= copy.numElements;
     capacity= copy.capacity;
     comparator= copy.comparator;
-    memcpy(elements, copy.elements, sizeof(T) * copy.capacity);
+    elements= new T[capacity];
+    std::memcpy(elements, copy.elements, sizeof(T) * copy.capacity);
 }
 
 template <class T>
 Heap<T>::~Heap() {
     delete[] elements;
     elements= nullptr;
-}
-
-template <class T>
-void Heap<T>::init() {
-    elements= new T[INIT_CAPACITY];
-    numElements= 0;
-    capacity= INIT_CAPACITY;
 }
 
 template <class T>
@@ -135,6 +124,14 @@ void Heap<T>::add(const T& elem) {
         elements[index1]= elements[index2];
         elements[index2]= temp;
     };
+
+    if (numElements == capacity) {
+        T *newList= new T[numElements * 2];
+        std::memcpy(newList, elements, sizeof(T) * capacity);
+        delete[] elements;
+        elements= newList;
+        capacity*= 2;
+    }
 
     int parent, index= numElements;
     elements[index]= elem;
@@ -162,8 +159,19 @@ T Heap<T>::remove() {
 
     elements[index]= elements[numElements-1];
     numElements--;
-    while(!(comparator(elements[index],elements[getLeftChild(index)]) >= 0 && comparator(elements[index], elements[getRightChild(index)]) >= 0)) {
-        if (comparator(elements[index], elements[getLeftChild(index)] < 0)) {
+    while(!(comparator(elements[index],elements[getLeftChild(index)]) >= 0 
+            && comparator(elements[index], elements[getRightChild(index)]) >= 0)) {
+
+        if (comparator(elements[index], elements[getLeftChild(index)]) < 0 && 
+            comparator(elements[index], elements[getRightChild(index)]) < 0) {
+            if (comparator(elements[getLeftChild(index)], elements[getRightChild(index)]) > 0 ) {
+                swap(index, getLeftChild(index));
+                index= getLeftChild(index);
+            } else {
+                swap(index, getRightChild(index));
+                index= getRightChild(index);
+            }
+        } else if (comparator(elements[index], elements[getLeftChild(index)]) < 0) {
             swap(index, getLeftChild(index));
             index= getLeftChild(index);
         } else if (comparator(elements[index], elements[getRightChild(index)]) < 0) {
