@@ -1,6 +1,8 @@
 #ifndef STOUGHTON1004LIB_HEAP_H
 #define STOUGHTON1004LIB_HEAP_H
 
+#include <iostream>
+#include <ostream>
 #include <functional>
 
 namespace Stoughton1004Lib {
@@ -64,6 +66,20 @@ public:
      * @return  Heap size
      */
     unsigned int size() const;
+    /**
+     * Print the contents of the heap in list index order.
+     * This does not print the heap in sorted order, just in the order 
+     * the elements reside in the list.
+     * @param   os  Output stream to write to
+     */
+    void print(std::ostream &os) const;
+    /**
+     * Print the contents of the heap in list index order with an newline.
+     * This does not print the heap in sorted order, just in the order 
+     * the elements reside in the list.
+     * @param   os  Output stream to write to
+     */
+    void println(std::ostream &os) const;
 
 private:
     /**
@@ -95,14 +111,13 @@ Heap<T>::Heap(const Heap& copy) {
     numElements= copy.numElements;
     capacity= copy.capacity;
     comparator= copy.comparator;
-    useNaturalOrder= copy.useNaturalOrder;
     memcpy(elements, copy.elements, sizeof(T) * copy.capacity);
 }
 
 template <class T>
 Heap<T>::~Heap() {
     delete[] elements;
-    elements= NULL;
+    elements= nullptr;
 }
 
 template <class T>
@@ -114,55 +129,55 @@ void Heap<T>::init() {
 
 template <class T>
 void Heap<T>::add(const T& elem) {
-    auto getParent= [](int index) -> { return (index-1)/2; };
-    auto swap= [&this](int index1, int index2) -> void {
+    auto getParent= [](int index) -> int { return (index-1)/2; };
+    auto swap= [this](int index1, int index2) -> void {
         T temp= elements[index1];
         elements[index1]= elements[index2];
-        elements[index2]= elements[index1];
+        elements[index2]= temp;
     };
 
     int parent, index= numElements;
-    elements[numElements]= elem;
-    
+    elements[index]= elem;
+    numElements++;
+
     parent= getParent(index);
-    while(comparator(elements[parent], elements[index]) > 0) {
+    while(comparator(elements[parent], elements[index]) < 0) {
         swap(parent, index);
         index= parent;
         parent= getParent(index);
     }
-    numElements++;
 }
 
 template <class T>
 T Heap<T>::remove() {
-    auto getLeftChild= [](int index) -> { return index * 2 + 1; };
-    auto getRightChild= [](int index) -> { return (index + 1) * 2; };
-    auto swap= [&this](int index1, int index2) -> void {
+    auto getLeftChild= [](int index) -> int { return index * 2 + 1; };
+    auto getRightChild= [](int index) -> int { return (index + 1) * 2; };
+    auto swap= [this](int index1, int index2) -> void {
         T temp= elements[index1];
         elements[index1]= elements[index2];
-        elements[index2]= elements[index1];
+        elements[index2]= temp;
     };
     T top= elements[0];
     int index= 0;
 
-    elements[index]= elements[numElements];
+    elements[index]= elements[numElements-1];
     numElements--;
-    while(!(comparator(elements[index],elements[getLeftChild(index)]) > 0 && comparator(elements[index], elements[getRightChild(index)]) > 0)) {
-        if (comparator(elements[index], elements[getLeftChild(index)] > 0)) {
+    while(!(comparator(elements[index],elements[getLeftChild(index)]) >= 0 && comparator(elements[index], elements[getRightChild(index)]) >= 0)) {
+        if (comparator(elements[index], elements[getLeftChild(index)] < 0)) {
             swap(index, getLeftChild(index));
             index= getLeftChild(index);
-        } else if (comparator(elements[index], elements[getRightChild(index)]) > 0) {
+        } else if (comparator(elements[index], elements[getRightChild(index)]) < 0) {
             swap(index, getRightChild(index));
             index= getRightChild(index);
         }
         if (getLeftChild(index) >= numElements || getRightChild(index) >= numElements)
             break;
     }
-    
+    return top;
 }
 
 template <class T>
-bool contains(const T& elem) const {
+bool Heap<T>::contains(const T& elem) const {
     int index;
     for(index= 0; index < numElements && comparator(elements[index],elem) != 0; index++) {
     }
@@ -171,19 +186,38 @@ bool contains(const T& elem) const {
 }
 
 template <class T>
-bool empty() const {
+bool Heap<T>::empty() const {
     return numElements == 0;
 }
 
 template <class T>
-T top() const {
+T Heap<T>::top() const {
     return elements[numElements];
 }
 
 template <class T>
-unsigned int size() const {
+unsigned int Heap<T>::size() const {
     return numElements;
 }
+
+template <class T>
+void Heap<T>::print(std::ostream &os) const {
+    os << "[";
+    for(auto i= 0; i < numElements; i++) {
+        if (i != 0) {
+            os << ", ";
+        }
+        os << elements[i];
+    }
+    os << "]";
+}
+
+template <class T>
+void Heap<T>::println(std::ostream &os) const {
+    print(os);
+    os << "\n";
+}
+
 
 }   //namespace Stoughton1004Lib
 
