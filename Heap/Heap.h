@@ -42,6 +42,11 @@ public:
      * @return  Top element of the heap
      */
     virtual T remove()= 0;
+    /**
+     * Merge the contents of the second heap into the calling object
+     * @param   heap    Heap to merge with
+     */
+    virtual void merge(Heap<T> const *heap)= 0;
 
     /**
      * Checks if the element is present in the heap
@@ -74,6 +79,12 @@ public:
      * @param   os  Output stream to write to
      */
     virtual void println(std::ostream &os) const= 0;
+    /**
+     * Retrieve the element stored at the index.
+     * @param   index   Index to read from
+     * @return  Element at the index
+     */
+    virtual T get(int index) const= 0;
 
 protected:
     Comparator comparator;          ///< Custom comparator used for ordering

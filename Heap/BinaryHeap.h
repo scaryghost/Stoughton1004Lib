@@ -33,6 +33,11 @@ public:
      * @return  Top element of the heap
      */
     virtual T remove();
+    /**
+     * Merge the contents of the second heap into the calling object.  Operation is O(n)
+     * @param   heap    Heap to merge with
+     */
+    virtual void merge(Heap<T> const *heap);
 
     virtual bool contains(const T& elem) const;
     virtual bool empty() const;
@@ -56,6 +61,7 @@ public:
      * @param   os  Output stream to write to
      */
     virtual void println(std::ostream &os) const;
+    virtual T get(int index) const;
 
 private:
     T* elements;                    ///< Pointer to the allocated memory for the heap
@@ -151,6 +157,15 @@ T BinaryHeap<T>::remove() {
 }
 
 template <class T>
+void BinaryHeap<T>::merge(Heap<T> const *heap) {
+    unsigned int i;
+
+    for(i= 0; i < heap->size(); i++) {
+        add(heap->get(i));
+    }
+}
+
+template <class T>
 bool BinaryHeap<T>::contains(const T& elem) const {
     int index;
     for(index= 0; index < numElements && comparator(elements[index],elem) != 0; index++) {
@@ -192,6 +207,10 @@ void BinaryHeap<T>::println(std::ostream &os) const {
     os << "\n";
 }
 
+template <class T>
+T BinaryHeap<T>::get(int index) const {
+    return elements[index];
+}
 
 }   //namespace Stoughton1004Lib
 
