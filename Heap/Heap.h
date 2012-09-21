@@ -10,7 +10,7 @@ template <class T>
 
 /**
  * Abstract class defining common functions shared by all Heap implementations.
- * Elements are ordered based a Comparator.
+ * Elements are ordered based a Comparator and are arranged to form a max heap
  * @author etsai
  */
 class Heap {
@@ -27,11 +27,6 @@ public:
      * @param   comparator  Custom comparator used to ordered the heap
      */
     Heap(const Comparator& comparator);
-    /**
-     * Copy constructor
-     * @param   copy    Heap to copy from
-     */
-    Heap(const Heap& copy);
     /**
      * Class destructor
      */
@@ -87,11 +82,6 @@ protected:
 template <class T>
 Heap<T>::Heap(const Comparator& comparator)
     :comparator(comparator) {
-}
-
-template <class T>
-Heap<T>::Heap(const Heap& copy) {
-    this->comparator= copy.comparator;
 }
 
 template <class T>
