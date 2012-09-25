@@ -1,6 +1,10 @@
 #ifndef STOUGHTON1004LIB_CLIBUILDER_H
 #define STOUGHTON1004LIB_CLIBUILDER_H
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 #include "Stoughton1004Lib/Exception/S1004LibException.h"
 #include "Stoughton1004Lib/CLI/Option.h"
 

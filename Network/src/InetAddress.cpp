@@ -1,5 +1,6 @@
 #include "Stoughton1004Lib/Network/InetAddress.h"
 
+#include <mutex>
 #include <string.h>
 #include <sys/types.h>
 
@@ -7,7 +8,6 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <thread>
 #else
 #include <ws2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
@@ -15,24 +15,18 @@
 
 namespace Stoughton1004Lib {
 
-#ifndef WIN32
 using std::lock_guard;
 using std::mutex;
-#endif
 using std::string;
 using std::unordered_map;
 using std::vector;
 
 unordered_map<string, vector<InetAddress> > InetAddress::resultsCache;
-#ifndef WIN32
 mutex cacheMutex;
-#endif
 
 const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1004LibException) {
     {
-#ifndef WIN32
         lock_guard<mutex> lock(cacheMutex);
-#endif
         if (resultsCache.count(hostName) != 0) {
             return resultsCache[hostName];
         }
@@ -70,9 +64,7 @@ const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1
 #endif
 
     {
-#ifndef WIN32
         lock_guard<mutex> lock(cacheMutex);
-#endif
         resultsCache[hostName]= results;
 
         return resultsCache[hostName];
