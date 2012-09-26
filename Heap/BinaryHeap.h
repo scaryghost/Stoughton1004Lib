@@ -119,8 +119,8 @@ void BinaryHeap<T>::add(const T& elem) {
 
 template <class T>
 T BinaryHeap<T>::remove() {
-    auto getLeftChild= [](int index) -> int { return index * 2 + 1; };
-    auto getRightChild= [](int index) -> int { return (index + 1) * 2; };
+    auto leftChild= [](int index) -> int { return index * 2 + 1; };
+    auto rightChild= [](int index) -> int { return (index + 1) * 2; };
     auto swap= [this](int index1, int index2) -> void {
         T temp= elements[index1];
         elements[index1]= elements[index2];
@@ -131,26 +131,25 @@ T BinaryHeap<T>::remove() {
 
     elements[index]= elements[numElements-1];
     numElements--;
-    while(!(comparator(elements[index],elements[getLeftChild(index)]) >= 0 
-            && comparator(elements[index], elements[getRightChild(index)]) >= 0)) {
-
-        if (comparator(elements[index], elements[getLeftChild(index)]) < 0 && 
-            comparator(elements[index], elements[getRightChild(index)]) < 0) {
-            if (comparator(elements[getLeftChild(index)], elements[getRightChild(index)]) > 0 ) {
-                swap(index, getLeftChild(index));
-                index= getLeftChild(index);
+    while(comparator(elements[index],elements[leftChild(index)]) < 0 
+            || (rightChild(index) < numElements && comparator(elements[index], elements[rightChild(index)]) < 0)) {
+        if (comparator(elements[index], elements[leftChild(index)]) < 0 && 
+            rightChild(index) < numElements && comparator(elements[index], elements[rightChild(index)]) < 0) {
+            if (comparator(elements[leftChild(index)], elements[rightChild(index)]) > 0 ) {
+                swap(index, leftChild(index));
+                index= leftChild(index);
             } else {
-                swap(index, getRightChild(index));
-                index= getRightChild(index);
+                swap(index, rightChild(index));
+                index= rightChild(index);
             }
-        } else if (comparator(elements[index], elements[getLeftChild(index)]) < 0) {
-            swap(index, getLeftChild(index));
-            index= getLeftChild(index);
-        } else if (comparator(elements[index], elements[getRightChild(index)]) < 0) {
-            swap(index, getRightChild(index));
-            index= getRightChild(index);
+        } else if (comparator(elements[index], elements[leftChild(index)]) < 0) {
+            swap(index, leftChild(index));
+            index= leftChild(index);
+        } else if (rightChild(index) < numElements && comparator(elements[index], elements[rightChild(index)]) < 0) {
+            swap(index, rightChild(index));
+            index= rightChild(index);
         }
-        if (getLeftChild(index) >= numElements || getRightChild(index) >= numElements)
+        if (leftChild(index) >= numElements || rightChild(index) >= numElements)
             break;
     }
     return top;
