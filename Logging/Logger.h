@@ -6,7 +6,7 @@
 
 #include <string>
 #include <unordered_map>
-#include <vector>
+#include <unordered_set>
 
 namespace Stoughton1004Lib {
 
@@ -29,6 +29,15 @@ public:
      */
     void addHandler(Handler *handler);
     /**
+     * Disassociate the handler from the logger
+     * @param   handler     Handler to remove
+     */
+    void removeHandler(Handler *handler);
+    /**
+     * Remove all handlers from the logger
+     */
+    void removeAllHandlers();
+    /**
      * Sets the logging level
      * @param   newLevel    New level of the logger
      */
@@ -41,6 +50,17 @@ public:
      */
     void log(Level level, const std::string &msg);
 
+    /**
+     * Get a reference to the handlers associated with the logger
+     * @return Reference to a set of handlers
+     */
+    const std::unordered_set<Handler*>& getHandlers() const;
+    /**
+     * Get the log level of the logger
+     * @return Logging level
+     */
+    Level getLevel() const;
+
 private:
     static std::unordered_map<std::string, Logger> loggers;     ///< Map of all loggers created
 
@@ -50,7 +70,7 @@ private:
      */
     Logger();
 
-    std::vector<Handler*> handlers;     ///< List of handlers tied to the logger
+    std::unordered_set<Handler*> handlers;     ///< List of handlers tied to the logger
     Level level                         ///< Logging level of the logger
 
 };  //class Logger

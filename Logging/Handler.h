@@ -21,10 +21,12 @@ public:
     virtual ~Handler();
 
     /**
-     * Publish the messages from the logger
+     * Publish the messages from the logger.  The boolean return type is used 
+     * as a way to filter handlers without using an if statement
      * @param   msg     Message to publish
+     * @return Always returns true
      */
-    virtual void publish(const std::string &msg)= 0;
+    virtual bool publish(const std::string &msg)= 0;
     /**
      * Close the handler and deallocated resources
      */
@@ -34,6 +36,12 @@ public:
      * @param   level   Logging level to set
      */
     void setLevel(Level newLevel) { level= newLevel; }
+
+    /**
+     * Get the logging level for the handler
+     * @return Log level
+     */
+    Level getLevel() const { return level; }
 
 protected:
     /**
