@@ -1,3 +1,3 @@
 LIB=Stoughton1004Lib
-MODULES=Network CLI
+MODULES=Network CLI Logging
 

@@ -13,7 +13,6 @@ include $(MODULE_CONFIG)
 OBJS= $(patsubst %.cpp, %.o, $(SRCS))
 
 all: $(OBJS)
-	@echo $(SRCS)
 	if [ ! -e $(DIST) ]; then \
 	    mkdir $(DIST); \
 	fi

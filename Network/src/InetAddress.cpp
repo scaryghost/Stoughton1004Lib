@@ -71,7 +71,7 @@ const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1
     }
 }
 
-string InetAddress::getLocalHostName() {
+string InetAddress::getLocalHostName() throw (S1004LibException) {
     char hostname[128];
 
 #ifdef WIN32

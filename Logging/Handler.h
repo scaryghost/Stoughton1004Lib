@@ -55,4 +55,4 @@ protected:
 
 }
 
-#endif STOUGHTON1004LIB_HANDLER_H
+#endif //STOUGHTON1004LIB_HANDLER_H
