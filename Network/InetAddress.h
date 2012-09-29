@@ -30,6 +30,12 @@ public:
      * @throw   S1004LibException   If an invalid host name is given
      */
     static const std::vector<InetAddress>& getByName(std::string hostName) throw(S1004LibException);
+    /**
+     * Get the host name of the local machine
+     * @return  Host name of the local machine
+     * @throw   S1004LibException   If Winsock failed to initialize
+     */
+    static string getLocalHostName() throw (S1004LibException);
 
     /**
      * Get the raw IP address of the object

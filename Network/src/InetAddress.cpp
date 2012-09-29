@@ -71,6 +71,25 @@ const vector<InetAddress>& InetAddress::getByName(std::string hostName) throw(S1
     }
 }
 
+string InetAddress::getLocalHostName() {
+    char hostname[128];
+
+#ifdef WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+        throw S1004LibException("Error initializing Winsock");
+    }
+#endif
+
+    gethostname(hostname, sizeof(hostname));
+
+#ifdef WIN32
+    WSACleanup();
+#endif
+
+    return hostname;
+}
+
 InetAddress::InetAddress() {
 }
 
