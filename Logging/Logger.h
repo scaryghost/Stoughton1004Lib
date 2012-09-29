@@ -71,8 +71,7 @@ private:
     Logger();
 
     std::unordered_set<Handler*> handlers;     ///< List of handlers tied to the logger
-    Level level                         ///< Logging level of the logger
-
+    Level level;                               ///< Logging level of the logger
 };  //class Logger
 
 }   //namespace Stoughton1004Lib

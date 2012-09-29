@@ -35,7 +35,7 @@ public:
      * @return  Host name of the local machine
      * @throw   S1004LibException   If Winsock failed to initialize
      */
-    static string getLocalHostName() throw (S1004LibException);
+    static std::string getLocalHostName() throw (S1004LibException);
 
     /**
      * Get the raw IP address of the object

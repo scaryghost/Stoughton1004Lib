@@ -9,7 +9,7 @@ using std::string;
 using std::time_t;
 using std::tm;
 
-FileHandler::FileHandler() : Handler(Level::INFO) throw(S1004LibException) {
+FileHandler::FileHandler() throw(S1004LibException) : Handler(Level::INFO) {
     time_t curr;
     tm* timeInfo;
     const char* format= "_%Y-%m-%d_%H-%M-%S";
@@ -23,7 +23,7 @@ FileHandler::FileHandler() : Handler(Level::INFO) throw(S1004LibException) {
     open();
 }
 
-FileHandler::FileHandler(const string filename) : Handler(Level::INFO) throw(S1004LibException) {
+FileHandler::FileHandler(const string filename) throw(S1004LibException) : Handler(Level::INFO) {
     this->filename= filename;
     open();
 }
