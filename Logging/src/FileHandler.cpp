@@ -11,13 +11,19 @@ using std::tm;
 
 FileHandler::FileHandler() throw(S1004LibException) : Handler(Level::INFO) {
     time_t curr;
-    tm* timeInfo;
     const char* format= "_%Y-%m-%d_%H-%M-%S";
     char timeStamp[80];
 
     time(&curr);
+#ifdef WIN32
+    tm timeInfo;
+    localtime_s(&timeInfo, &curr);
+    strftime(timeStamp, sizeof(timeStamp), format, &timeInfo);
+#else
+    tm* timeInfo;
     timeInfo= localtime(&curr);
     strftime(timeStamp, sizeof(timeStamp), format, timeInfo);
+#endif
     filename= InetAddress::getLocalHostName() + timeStamp + ".log";
 
     open();

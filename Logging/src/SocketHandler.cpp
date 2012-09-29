@@ -4,7 +4,7 @@ namespace Stoughton1004Lib {
 
 using std::string;
 
-SocketHandler::SocketHandler(const string hostname, int port, Mode mode) : Handler(Level::INFO) {
+SocketHandler::SocketHandler(const string hostname, int port, Mode mode) throw(S1004LibException) : Handler(Level::INFO) {
     if (mode == TCP) {
         tcpSocket= new Socket(hostname, port);
         udpSocket= nullptr;

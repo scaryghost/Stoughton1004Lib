@@ -18,7 +18,7 @@ public:
      * Overloaded class destructor
      * @see close
      */
-    virtual ~Handler();
+    virtual ~Handler() {}
 
     /**
      * Publish the messages from the logger.  The boolean return type is used 
