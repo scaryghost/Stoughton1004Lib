@@ -23,7 +23,7 @@ FileHandler::FileHandler() : Handler(Level::INFO) throw(S1004LibException) {
     open();
 }
 
-FileHandler::FileHandler(const std::string filename) : Handler(Level::INFO) throw(S1004LibException) {
+FileHandler::FileHandler(const string filename) : Handler(Level::INFO) throw(S1004LibException) {
     this->filename= filename;
     open();
 }
@@ -39,7 +39,7 @@ void FileHandler::open() throw(S1004LibException) {
     }
 }
 
-bool FileHandler::publish(const std::string &msg) {
+bool FileHandler::publish(const string &msg) {
     fd << msg << "\n";
     return true;
 }
