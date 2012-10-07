@@ -2,7 +2,7 @@ include config.mk
 
 CPPC=g++
 DIST=dist/
-LIB=Stoughton1004Lib.a
+LIB=libstoughton1004.a
 MODULE_CONFIG= $(foreach module, $(MODULES), $(module)/src/config.mk)
 SRCS:=
 INC=../
