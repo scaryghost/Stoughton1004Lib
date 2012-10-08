@@ -47,7 +47,7 @@ void Logger::setLevel(Level newLevel) {
 void Logger::log(Level level, const string &msg) {
     auto publish= [this, &level, &msg]() -> bool {
         for(auto it= handlers.begin(); it != handlers.end(); it++) {
-            (*it)->getLevel() >= level && (*it)->publish(msg);
+            level >= (*it)->getLevel() && (*it)->publish(msg);
         }
         return true;
     };

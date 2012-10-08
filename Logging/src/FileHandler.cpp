@@ -47,6 +47,7 @@ void FileHandler::open() throw(S1004LibException) {
 
 bool FileHandler::publish(const string &msg) {
     fd << msg << "\n";
+    fd.flush();
     return true;
 }
 
