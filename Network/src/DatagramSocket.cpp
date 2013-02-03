@@ -15,6 +15,7 @@ typedef int socklen_t;
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #endif
 
 namespace Stoughton1004Lib {

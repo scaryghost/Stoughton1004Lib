@@ -6,6 +6,8 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 typedef int socklen_t;
+#else
+#include <unistd.h>
 #endif
 
 namespace Stoughton1004Lib {

@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #else
 #include <ws2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
