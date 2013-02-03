@@ -5,7 +5,6 @@
 
 namespace Stoughton1004Lib {
 
-using std::string;
 using std::time_t;
 using std::tm;
 
@@ -29,7 +28,7 @@ FileHandler::FileHandler() throw(S1004LibException) : Handler(Level::INFO) {
     open();
 }
 
-FileHandler::FileHandler(const string filename) throw(S1004LibException) : Handler(Level::INFO) {
+FileHandler::FileHandler(const std::string filename) throw(S1004LibException) : Handler(Level::INFO) {
     this->filename= filename;
     open();
 }
@@ -45,7 +44,7 @@ void FileHandler::open() throw(S1004LibException) {
     }
 }
 
-bool FileHandler::publish(const string &msg) {
+bool FileHandler::publish(const std::string &msg) {
     fd << msg << "\n";
     fd.flush();
     return true;

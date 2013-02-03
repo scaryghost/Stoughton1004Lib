@@ -31,7 +31,7 @@ public:
      * Create a SocketHandler, sending the packets to given hostname and port, 
      * and using the specified mode
      * @param   hostname    Address of the remote machine to broadcast to
-     * @param   post        Port of the remote machine
+     * @param   port        Port of the remote machine
      * @param   mode        Operation mode, defaults to TCP
      * @throw   S1104LibException   If socket created failed, or could not establish 
      *                              a connection to the remote server (TCP mode)

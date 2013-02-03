@@ -33,7 +33,7 @@ public:
     virtual void close()= 0;
     /**
      * Set the logging level for the handler
-     * @param   level   Logging level to set
+     * @param   newLevel   Logging level to set
      */
     void setLevel(Level newLevel) { level= newLevel; }
 

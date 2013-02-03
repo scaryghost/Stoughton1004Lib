@@ -22,7 +22,7 @@ Socket::Socket() throw(S1004LibException) {
     init();
 }
 
-Socket::Socket(const string& hostname, int port) throw(S1004LibException) {
+Socket::Socket(const std::string& hostname, int port) throw(S1004LibException) {
     init();
     connect(hostname, port);
 }
@@ -74,7 +74,7 @@ void Socket::close() {
     closed= true;
 }
 
-void Socket::connect(const string& hostname, int port) throw(S1004LibException) {
+void Socket::connect(const std::string& hostname, int port) throw(S1004LibException) {
     if (closed) {
         throw S1004LibException("Socket is closed");
     }
@@ -104,7 +104,7 @@ void Socket::connect(const string& hostname, int port) throw(S1004LibException) 
     connected= true;
 }
 
-void Socket::write(const string& msg) throw(S1004LibException) {
+void Socket::write(const std::string& msg) throw(S1004LibException) {
     int nBytes;
 
 #ifndef WIN32
@@ -117,7 +117,7 @@ void Socket::write(const string& msg) throw(S1004LibException) {
     }
 }
 
-string Socket::read(unsigned int nBytes) throw(S1004LibException) {
+std::string Socket::read(unsigned int nBytes) throw(S1004LibException) {
     if (closed) {
         throw S1004LibException("Socket closed, cannot read");
     }
@@ -154,7 +154,7 @@ string Socket::read(unsigned int nBytes) throw(S1004LibException) {
     return msg;
 }
 
-string Socket::readLine() throw(S1004LibException) {
+std::string Socket::readLine() throw(S1004LibException) {
     string msg, ch;
     auto terminate= [this](string ch) -> bool {
         readCarriage= ch == "\r";
@@ -175,7 +175,7 @@ int Socket::getPort() const {
     return ntohs(connectionInfo.sin_port);
 }
 
-string Socket::getAddress() const {
+std::string Socket::getAddress() const {
     return inet_ntoa(connectionInfo.sin_addr);
 }
 
